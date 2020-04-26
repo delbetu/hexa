@@ -1,0 +1,5 @@
+export const ADD_NUMBER = 'ADD_NUMBER'
+export const SET_NEXT_NUMBER = 'SET_NEXT_NUMBER'
+export const ADD_REMOTE_USER_IDS = 'ADD_REMOTE_USER_IDS'
+export const UPDATE_PING_RESULT = 'UPDATE_PING_RESULT'
+export const FETCH_PING = 'FETCH_PING'

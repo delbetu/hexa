@@ -1,0 +1,10 @@
+*.un~
+/frontend/node_modules
+/frontend/dist
+/backend/vendor/bundle
+/backend/tags
+**/*.log
+**/*.sqlite3
+**/tmp/
+**/.byebug_history
+/.env

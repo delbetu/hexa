@@ -1,0 +1,13 @@
+#!/bin/bash
+
+case $RACK_ENV in
+  "test")
+    source .env.test
+    ;;
+  *)
+    source .env
+    ;;
+esac
+cd $APP_ROOT
+sequel -E $DATABASE_URL $APP_ROOT/db/seeds.rb 
+

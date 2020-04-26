@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "users",
+      "attributes": {
+        "name": "Batman",
+        "email": "bruce@batcave.com"
+      }
+    },
+    {
+      "id": "2",
+      "type": "users",
+      "attributes": {
+        "name": "Penguin",
+        "email": "penguin@gotham.com"
+      }
+    }
+  ]
+}

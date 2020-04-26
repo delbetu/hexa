@@ -1,0 +1,65 @@
+version: "3"
+services:
+  postgres:
+    image: "postgres:12.2"
+    container_name: "hexa_postgres"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+
+  redis:
+    image: "redis"
+    container_name: "hexa_redis"
+    ports:
+      - 6379:6379
+    command: redis-server
+    volumes:
+      - redis_volume:/data
+
+  # sidekiq:
+  #   container_name: "hexa_sidekiq"
+  #   depends_on:
+  #     - redis
+  #   build: backend
+  #   env_file:
+  #     - backend/.env
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379/0
+  #     - BUNDLE_PATH=/hexa_app/vendor/bundle
+  #   volumes:
+  #     - ./backend:/hexa_app
+  #   command: bundle exec sidekiq -r ./worker.rb
+
+  rack:
+    container_name: "hexa_rack"
+    depends_on:
+      - postgres
+      # - sidekiq
+    build: backend
+    ports:
+      - 3000:3000
+    env_file:
+      - backend/.env
+    environment:
+      - RACK_ENV=docker
+    volumes:
+      - ./backend:/hexa_app:rw
+    user: 1000:1000
+    command: bundle exec rackup -I lib -I app -p 3000 -o 0.0.0.0
+
+  # webpack_dev:
+  #   container_name: "hexa_webpack"
+  #   image: node
+  #   build: frontend
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     - ./frontend:/web_frontend
+  #   command: npm run dev
+
+volumes:
+  redis_volume:
+  db_volume:

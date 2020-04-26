@@ -1,0 +1,14 @@
+#!/bin/bash
+
+case $RACK_ENV in
+  "test")
+    source .env.test
+    ;;
+  *)
+    source .env
+    ;;
+esac
+echo $DATABASE_URL
+sudo su - postgres -c "createuser -h ${DATABASE_HOST} -p ${DATABASE_PORT} -U ${DATABASE_USERNAME} --createdb --no-password ${DATABASE_USERNAME}"
+sudo su - postgres -c "createdb -h ${DATABASE_HOST} -p ${DATABASE_PORT} -U ${DATABASE_USERNAME} -O ${DATABASE_USERNAME} ${DATABASE_NAME}"
+echo "Database ${DATABASE_NAME} created!"

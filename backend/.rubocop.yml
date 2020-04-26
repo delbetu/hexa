@@ -1,0 +1,53 @@
+require:
+  - "rubocop-performance"
+
+AllCops:
+  Exclude:
+    - "bin/**/*"
+    - "doc/**/*"
+    - "log/**/*"
+    - "db/**/*"
+    - "config/**/*"
+    - "./.pryrc"
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Layout/LineLength:
+  Max: 100
+
+Style/Documentation:
+  Exclude:
+    - "spec/**/*"
+    - "config/**/*"
+    - "db/**/*"
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+    - "config/routes/**/*"
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - "spec/**/*"
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true

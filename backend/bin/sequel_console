@@ -1,0 +1,11 @@
+#!/bin/bash
+case $RACK_ENV in
+  "test")
+    source .env.test
+    ;;
+  *)
+    source .env
+    ;;
+esac
+echo 'Connecting to ' $DATABASE_URL
+sequel $DATABASE_URL

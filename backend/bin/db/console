@@ -1,0 +1,12 @@
+#!/bin/bash
+
+case $RACK_ENV in
+  "test")
+    source .env.test
+    ;;
+  *)
+    source .env
+    ;;
+esac
+
+sudo su - postgres -c "psql ${DATABASE_NAME} ${DATABASE_USERNAME}"

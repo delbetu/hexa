@@ -1,0 +1,10 @@
+{
+  "data": {
+    "id": "33",
+    "type": "users",
+    "attributes": {
+      "name": "Bruce",
+      "email": null
+    }
+  }
+}

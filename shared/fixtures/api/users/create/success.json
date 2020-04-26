@@ -1,0 +1,10 @@
+{
+  "data": {
+    "id": "110",
+    "type": "users",
+    "attributes": {
+      "name": "Batman",
+      "email": "bruce@batcave.com"
+    }
+  }
+}

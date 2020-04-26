@@ -1,0 +1,12 @@
+#!/bin/bash
+
+case $RACK_ENV in
+  "test")
+    source .env.test
+    ;;
+  *)
+    source .env
+    ;;
+esac
+
+sequel -c "p DB.tables" $DATABASE_URL

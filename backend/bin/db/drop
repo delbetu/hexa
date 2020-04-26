@@ -1,0 +1,14 @@
+#!/bin/bash
+
+case $RACK_ENV in
+  "test")
+    source .env.test
+    ;;
+  *)
+    source .env
+    ;;
+esac
+sudo su - postgres -c "dropdb -h ${DATABASE_HOST} -p ${DATABASE_PORT} -U ${DATABASE_USERNAME} ${DATABASE_NAME}"
+sudo su - postgres -c "dropuser -h ${DATABASE_HOST} -p ${DATABASE_PORT} -U ${DATABASE_USERNAME} $DATABASE_USERNAME"
+
+echo "db ${DATABASE_NAME} droped!"
