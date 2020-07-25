@@ -11,5 +11,5 @@ module Persistence
   class DeleteError < Error; end
 
   require 'persistence/generic_crud'
-  require 'persistence/users'
+  require 'sign_in/infrastructure/users_sequel_adapter'
 end
