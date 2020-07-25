@@ -6,5 +6,5 @@ module App
 end
 require 'authorizer'
 require 'token'
-require 'domain/user_credentials'
-require 'features/sign_in_flow'
+require 'sign_in/domain/user_credentials'
+require 'sign_in/flow'
