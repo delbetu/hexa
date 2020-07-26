@@ -60,23 +60,6 @@ describe 'patch /users/:id' do
   end
 end
 
-describe 'post /users' do
-  it 'creates a user' do
-    batman = build_user.with(name: 'Batman').build
-
-    # TODO: add test support helper: token_with_permissions('sign_up')
-    header 'Authorization', App::Token.encode({'permissions' => ['sign_up']})
-    post '/users', user: batman
-
-    expect(last_response).to be_ok
-    content = JSON.parse(last_response.body)
-    expect(content.dig('data', 'type')).to eq('users')
-    expect(content.dig('data', 'attributes', 'name')).to eq('Batman')
-
-    File.write("#{APP_ROOT}/../shared/fixtures/api/users/create/success.json", JSON.pretty_generate(content))
-  end
-end
-
 describe 'delete /users' do
   it 'deletes a user' do
     batman = Persistence::Users.create(build_user.with(name: 'Batman').build)
