@@ -1,6 +1,6 @@
 require 'app_helper'
 require 'capybara/rspec'
-require 'ports'
+require 'shared/ports'
 
 feature 'User identifies against the system' do
   let(:given_a_user_with_some_permission) do

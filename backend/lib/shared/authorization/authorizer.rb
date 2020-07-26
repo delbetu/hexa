@@ -1,4 +1,4 @@
-require 'ports'
+require 'shared/ports'
 require 'bcrypt'
 
 # TODO: Replace with contracts

@@ -1,6 +1,6 @@
 require 'capybara/rspec'
 require 'load_app'
-require 'ports'
+require 'shared/ports'
 
 feature 'User cannot identify against the system' do
   let(:with_some_permission) do

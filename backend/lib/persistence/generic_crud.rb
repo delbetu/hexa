@@ -1,4 +1,4 @@
-require 'ports'
+require 'shared/ports'
 
 module GenericCrud
   extend ::Ports::Crud
