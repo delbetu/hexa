@@ -10,6 +10,6 @@ module Persistence
   class UpdateError < Error; end
   class DeleteError < Error; end
 
-  require 'persistence/generic_crud'
+  require 'shared/generic_crud_sequel_adapter'
   require 'sign_in/infrastructure/users_sequel_adapter'
 end

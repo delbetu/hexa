@@ -1,5 +1,4 @@
 require 'sinatra'
-require_relative 'api/v1/ping'
 require_relative 'api/v1/users'
 require_relative 'sign_in/infrastructure/api_v1'
 
