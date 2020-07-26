@@ -2,19 +2,6 @@ def UserCredentials(params)
   Domain::UserCredentials.new(**params)
 end
 
-module ParseHelpers
-  def parse_email(email)
-    regexp = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
-    raise ArgumentError, "Malformed email" unless email.match(regexp)
-    email
-  end
-
-  def parse_password(password)
-    # TODO: check that password must be encoded
-    password
-  end
-end
-
 module Domain
   class UserCredentials
     include ParseHelpers
