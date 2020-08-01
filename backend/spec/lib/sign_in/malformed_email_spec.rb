@@ -15,7 +15,7 @@ feature 'User cannot identify against the system' do
     expect(@result.error['messages']).to eq ['Malformed email']
   end
 
-  subject { App::SignInFlow.new(authorizer: authorizer) }
+  subject { SignInFlow.new(authorizer: authorizer) }
 
   let(:authorizer) {
     authorizer = instance_double(Authorizer, grant_access: true)

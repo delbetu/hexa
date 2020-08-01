@@ -1,3 +1,4 @@
+require 'shared/authorization/domain/token'
 require 'shared/ports'
 require 'bcrypt'
 
@@ -13,7 +14,7 @@ class Authorizer
   }.freeze
 
   # authorization_data: Crud data source with email, password
-  def initialize(authorization_data: Persistence::Users)
+  def initialize(authorization_data: Adapters::Users)
     @authorization_data = authorization_data
   end
 

@@ -24,7 +24,7 @@ feature 'User identifies against the system' do
     )
   }
 
-  subject { App::SignInFlow.new(authorizer: authorizer) }
+  subject { SignInFlow.new(authorizer: authorizer) }
 
   scenario 'user provides the right credentials' do
     given_a_user_with_some_permission

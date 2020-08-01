@@ -4,8 +4,8 @@ get '/sign_in' do
   password = params[:password]
 
   # Perform Work
-  authorizer = Authorizer.new(authorization_data: Persistence::Users)
-  flow = App::SignInFlow.new(authorizer: authorizer)
+  authorizer = Authorizer.new(authorization_data: Adapters::Users)
+  flow = SignInFlow.new(authorizer: authorizer)
   result = flow.sign_in(email: params[:email], password: params[:password])
 
   # Deliver result

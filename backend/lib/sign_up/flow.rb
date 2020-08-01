@@ -1,7 +1,7 @@
 require 'sign_up/domain/user'
 
 class SignUp
-  def self.call(user_attributes, access_token, creator: Persistence::Users)
+  def self.call(user_attributes, access_token, creator: Adapters::Users)
     # authorization
     decoded_token = Token.decode(access_token)
     permissions = decoded_token[0]['permissions']
