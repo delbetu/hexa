@@ -12,7 +12,7 @@ module App
         it 'raise not-authorized' do
           expect {
             subject.authorize(email: 'bruce.wayne@gotham.com', password: pwd)
-          }.to raise_error(Ports::Authorizer::NotAuthorizedError)
+          }.to raise_error(App::Authorizer::NotAuthorizedError)
         end
       end
 
@@ -40,7 +40,7 @@ module App
         it 'raise not-authorized' do
           expect {
             subject.get_permissions
-          }.to raise_error(Ports::Authorizer::NotAuthorizedError)
+          }.to raise_error(App::Authorizer::NotAuthorizedError)
         end
       end
 
@@ -54,7 +54,7 @@ module App
             hr: [:feature1, :feature2],
             candidate: [:feature3]
           })
-          
+
           result = subject.get_permissions
 
           expect(result).to eq([:feature1, :feature2, :feature3])
@@ -76,7 +76,7 @@ module App
         it 'raise not-authorized' do
           expect {
             subject.grant_access
-          }.to raise_error(Ports::Authorizer::NotAuthorizedError)
+          }.to raise_error(App::Authorizer::NotAuthorizedError)
         end
       end
 

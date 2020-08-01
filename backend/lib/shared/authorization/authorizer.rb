@@ -1,31 +1,14 @@
 require 'shared/ports'
 require 'bcrypt'
 
-# TODO: Replace with contracts
 module Ports
   module Authorizer
-    extend Interface
-    method(
-      :grant_access,
-      key_args: {
-        permissions: { 'roles' => ['<RoleEnum>'] }
-      }
-    )
-    method(
-      :get_permissions,
-      # results: ['<PermissionEnum>'] Not supported yet
-    )
-
-    # Verify that the credentials are legitimate
-    method(:authorize, key_args: { email: '<Email>', password: '<String>' } )
-
-    NotAuthorizedError = Class.new(StandardError)
   end
 end
 
 module App
   class Authorizer
-    Ports::Authorizer
+    NotAuthorizedError = Class.new(StandardError)
 
     USER_ROLE = { 'bruce.wayne@gotham.com' => [:hr] }.freeze
     ROLES = [:hr].freeze
@@ -45,19 +28,19 @@ module App
       encrypted_password = BCrypt::Password.create(password)
       # TODO: filters instead of filter???
       result = authorization_data.read(filter: [email: email, password: encrypted_password])
-      raise Ports::Authorizer::NotAuthorizedError if result.empty?
+      raise App::Authorizer::NotAuthorizedError if result.empty?
       @authorized_user = result.first
     end
 
     def get_permissions
-      raise Ports::Authorizer::NotAuthorizedError unless authorized_user
+      raise App::Authorizer::NotAuthorizedError unless authorized_user
       roles = authorized_user[:roles]
 
       roles.map { |role| PERMISSIONS[role.to_sym] }.flatten.compact
     end
 
     def grant_access(roles: [])
-      raise Ports::Authorizer::NotAuthorizedError unless authorized_user
+      raise App::Authorizer::NotAuthorizedError unless authorized_user
 
       current_roles = authorized_user[:roles]
       new_roles = current_roles + roles

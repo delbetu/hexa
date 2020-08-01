@@ -4,7 +4,7 @@ require 'shared/ports'
 
 feature 'User cannot identify against the system' do
   let(:with_some_permission) do
-    authorizer.grant_access(email: 'peter@email.com', permissions: { 'roles' => [:hr] })
+    authorizer.grant_access(roles: [:hr])
   end
 
   let(:when_he_signs_in_using_malformed_email) do
@@ -18,7 +18,7 @@ feature 'User cannot identify against the system' do
   subject { App::SignInFlow.new(authorizer: authorizer) }
 
   let(:authorizer) {
-    authorizer = instance_double(Ports::Authorizer, grant_access: true)
+    authorizer = instance_double(App::Authorizer, grant_access: true)
     authorizer
   }
 

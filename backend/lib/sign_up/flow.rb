@@ -5,14 +5,14 @@ class SignUp
     # authorization
     decoded_token = App::Token.decode(access_token)
     permissions = decoded_token[0]['permissions']
-    raise Ports::Authorizer::NotAuthorizedError unless permissions.include?('sign_up')
+    raise App::Authorizer::NotAuthorizedError unless permissions.include?('sign_up')
 
     # parsing
     parsed_user = User(user_attributes)
 
     # error_handling
 
-    OpenStruct.new(Persistence::Users.create(parsed_user.to_h))
+    OpenStruct.new(creator.create(parsed_user.to_h))
   end
 end
 

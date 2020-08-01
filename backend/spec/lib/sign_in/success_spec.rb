@@ -4,7 +4,7 @@ require 'shared/ports'
 
 feature 'User identifies against the system' do
   let(:given_a_user_with_some_permission) do
-    authorizer.grant_access(email: 'peter@email.com', permissions: { 'roles' => [:hr] })
+    authorizer.grant_access(roles: [:hr])
   end
 
   let(:when_he_signs_in_using_the_right_credentials) do
@@ -17,7 +17,7 @@ feature 'User identifies against the system' do
 
   let(:authorizer) {
     instance_double(
-      Ports::Authorizer,
+      App::Authorizer,
       authorize: true,
       grant_access: true,
       get_permissions: { 'roles' => [:hr] }
