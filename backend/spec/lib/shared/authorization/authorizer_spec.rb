@@ -12,7 +12,7 @@ module App
         it 'raise not-authorized' do
           expect {
             subject.authorize(email: 'bruce.wayne@gotham.com', password: pwd)
-          }.to raise_error(App::Authorizer::NotAuthorizedError)
+          }.to raise_error(Authorizer::NotAuthorizedError)
         end
       end
 
@@ -40,7 +40,7 @@ module App
         it 'raise not-authorized' do
           expect {
             subject.get_permissions
-          }.to raise_error(App::Authorizer::NotAuthorizedError)
+          }.to raise_error(Authorizer::NotAuthorizedError)
         end
       end
 
@@ -50,7 +50,7 @@ module App
         end
 
         it 'returns a list with all the permissions for all the user roles' do
-          stub_const("App::Authorizer::PERMISSIONS", {
+          stub_const("Authorizer::PERMISSIONS", {
             hr: [:feature1, :feature2],
             candidate: [:feature3]
           })
@@ -76,7 +76,7 @@ module App
         it 'raise not-authorized' do
           expect {
             subject.grant_access
-          }.to raise_error(App::Authorizer::NotAuthorizedError)
+          }.to raise_error(Authorizer::NotAuthorizedError)
         end
       end
 

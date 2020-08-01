@@ -14,13 +14,12 @@ module App
       user = UserCredentials(email: email, password: password)
 
       authorizer.authorize(email: email, password: password)
-      permissions = authorizer.get_permissions
 
       result = SignInResult.new
       # TODO: make authorizer to return encoded token.
-      result.token = App::Token.encode({ 'permissions' => permissions })
+      result.token = authorizer.get_token
       result
-    rescue App::Authorizer::NotAuthorizedError, ArgumentError => e
+    rescue Authorizer::NotAuthorizedError, ArgumentError => e
       result = SignInResult.new
       result.success = false
       result.error = { 'messages' => [ e.message ] }

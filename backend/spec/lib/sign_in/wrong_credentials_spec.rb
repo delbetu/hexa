@@ -18,10 +18,10 @@ feature 'User cannot identify against the system' do
   subject { App::SignInFlow.new(authorizer: authorizer) }
 
   let(:authorizer) {
-    authorizer = instance_double(App::Authorizer, grant_access: true)
+    authorizer = instance_double(Authorizer, grant_access: true)
     allow(authorizer).to receive(:authorize)
       .with(email: 'peter@email.com', password: 'wrong-pass')
-      .and_raise(App::Authorizer::NotAuthorizedError, 'Invalid email or password.')
+      .and_raise(Authorizer::NotAuthorizedError, 'Invalid email or password.')
     authorizer
   }
 

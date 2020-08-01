@@ -18,7 +18,7 @@ feature 'User cannot identify against the system' do
   subject { App::SignInFlow.new(authorizer: authorizer) }
 
   let(:authorizer) {
-    authorizer = instance_double(App::Authorizer, grant_access: true)
+    authorizer = instance_double(Authorizer, grant_access: true)
     authorizer
   }
 

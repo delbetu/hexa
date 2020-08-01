@@ -12,15 +12,15 @@ feature 'User identifies against the system' do
   end
 
   let(:then_the_app_encodes_user_permissions_as_a_token_and_returns_it) do
-    expect(App::Token.decode(@result.token).first['permissions']).to eq('roles' => ['hr'])
+    expect(Token.decode(@result.token).first['permissions']).to eq('roles' => ['hr'])
   end
 
   let(:authorizer) {
     instance_double(
-      App::Authorizer,
+      Authorizer,
       authorize: true,
       grant_access: true,
-      get_permissions: { 'roles' => [:hr] }
+      get_token: Token.encode('permissions' => { 'roles' => ['hr'] })
     )
   }
 

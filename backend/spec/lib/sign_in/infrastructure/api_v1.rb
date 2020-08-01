@@ -12,6 +12,6 @@ describe "/sign_in" do
     get '/sign_in', email: 'bruce.wayne@gotham.com', password: 'batcave'
 
     expect(last_response).to be_ok
-    expect(JSON.parse(last_response.body).dig('token')).to eq(App::Token.encode({'permissions' => ['sign_in', 'sign_up']}))
+    expect(JSON.parse(last_response.body).dig('token')).to eq(Token.encode({'permissions' => ['sign_in', 'sign_up']}))
   end
 end
