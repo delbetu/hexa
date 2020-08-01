@@ -6,5 +6,5 @@ puts "WARNING: PENDING MIGRATIONS" unless Sequel::Migrator.is_current?(DB, "#{AP
 
 module Adapters
   require 'shared/adapters/sequel/crud'
-  require 'sign_up/infrastructure/users_adapter'
+  require 'shared/adapters/users_adapter' # TODO: not being used but it is tested.
 end
