@@ -11,5 +11,5 @@ module Persistence
   class DeleteError < Error; end
 
   require 'shared/generic_crud_sequel_adapter'
-  require 'sign_in/infrastructure/users_sequel_adapter'
+  require 'sign_up/infrastructure/users_sequel_adapter'
 end

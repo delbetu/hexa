@@ -17,6 +17,7 @@ module App
       permissions = authorizer.get_permissions
 
       result = SignInResult.new
+      # TODO: make authorizer to return encoded token.
       result.token = App::Token.encode({ 'permissions' => permissions })
       result
     rescue Ports::Authorizer::NotAuthorizedError, ArgumentError => e
