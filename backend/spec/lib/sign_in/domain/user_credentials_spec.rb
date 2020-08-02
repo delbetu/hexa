@@ -1,4 +1,4 @@
-require 'app_helper'
+require 'sign_in/domain/user_credentials'
 
 describe Domain::UserCredentials do
   subject { UserCredentials(email: 'batman@gotham.com', password: 'batcave') }

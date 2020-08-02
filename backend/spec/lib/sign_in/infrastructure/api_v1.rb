@@ -1,6 +1,8 @@
-require 'api_persistence_helper'
+require 'spec_helper'
+require 'api_helper'
 
-describe "/sign_in" do
+# TODO: should be post ?
+describe "GET /sign_in" do
   it 'returns a token which encodes permissions for logged in user' do
     # TODO: use domain factories to ensure valid user
     Adapters::Users.create(

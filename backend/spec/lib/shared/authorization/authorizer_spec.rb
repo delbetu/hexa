@@ -1,4 +1,5 @@
-require 'app_helper'
+require 'spec_helper'
+require 'shared/authorization/authorizer'
 
 describe Authorizer do
   let(:pwd) { '$2a$12$P96rj9YOWNtHwN8lNnq4oOeRO0KMENX1neqDYFSUFw9UbfbKtmeXG' }

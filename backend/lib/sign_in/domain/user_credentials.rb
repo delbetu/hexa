@@ -1,3 +1,5 @@
+require 'shared/parse_helpers'
+
 def UserCredentials(params)
   Domain::UserCredentials.new(**params)
 end

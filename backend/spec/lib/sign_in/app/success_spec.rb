@@ -1,6 +1,7 @@
-require 'app_helper'
+require 'spec_helper'
 require 'capybara/rspec'
-require 'shared/ports'
+require 'shared/authorization/authorizer'
+require 'sign_in/app/flow'
 
 feature 'User identifies against the system' do
   let(:given_a_user_with_some_permission) do

@@ -1,4 +1,7 @@
-require 'api_persistence_helper'
+require 'spec_helper'
+require 'api_helper'
+require 'persistence_helper'
+
 
 describe 'post /users' do
   it 'creates a user' do

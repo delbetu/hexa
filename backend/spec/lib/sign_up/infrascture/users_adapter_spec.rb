@@ -1,4 +1,5 @@
 require 'persistence_helper'
+require 'shared/adapters/users_adapter'
 
 describe Adapters::Users do
   describe '.read' do
