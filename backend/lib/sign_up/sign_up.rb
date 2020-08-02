@@ -11,9 +11,14 @@ class SignUp
     # parsing
     parsed_user = User(user_attributes)
 
-    # error_handling
+    # Perform Job chain ( in transaction mode )
+    user_created = creator.create(parsed_user.to_h)
+    # TODO: send_confirmation_link(user_created) # creates a pending confirmation
 
-    OpenStruct.new(creator.create(parsed_user.to_h))
+    OpenStruct.new(user_created.merge(success?: true))
+  # rescue UserError
+    # TODO: do not show details of all errors to users
+  rescue => e # error_handling
+    OpenStruct.new(user_created.merge(success?: false, errors: e.message))
   end
 end
-

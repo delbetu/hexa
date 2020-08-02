@@ -1,9 +1,9 @@
+require 'sign_up/sign_up'
+
 class UsersSerializer
   include FastJsonapi::ObjectSerializer
   attributes :name, :email
 end
-
-require 'sign_up/flow'
 
 post '/users' do
   token = request.env['HTTP_AUTHORIZATION']
