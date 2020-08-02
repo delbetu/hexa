@@ -2,7 +2,7 @@ require 'sign_in/domain/user_credentials'
 
 class SignInFlow
   # Inject collaborators dependencies
-  def initialize(authorizer:)
+  def initialize(authorizer: AuthorizerPort)
     @authorizer = authorizer
   end
 

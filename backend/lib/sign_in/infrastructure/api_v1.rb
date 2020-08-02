@@ -1,10 +1,14 @@
+require "shared/authorization/infrastructure/auth_data_provider_adapter"
+require "shared/authorization/authorizer"
+require "sign_in/flow"
+
 get '/sign_in' do
   # Gather Input ( params, db or external resource)
   email = params[:email]
   password = params[:password]
 
   # Perform Work
-  authorizer = Authorizer.new(authorization_data: Adapters::Users)
+  authorizer = Authorizer.new(authorization_data: AuthDataProviderAdapter)
   flow = SignInFlow.new(authorizer: authorizer)
   result = flow.sign_in(email: params[:email], password: params[:password])
 

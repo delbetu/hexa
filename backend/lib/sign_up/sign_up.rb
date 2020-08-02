@@ -1,8 +1,8 @@
 require 'sign_up/domain/user'
-require 'sign_up/infrastructure/user_creator_adapter'
+require 'sign_up/domain/user_creator_port'
 
 class SignUp
-  def self.call(user_attributes, access_token, creator: UserCreatorAdapter)
+  def self.call(user_attributes, access_token, creator: UserCreatorPort)
     # authorization
     decoded_token = Token.decode(access_token)
     permissions = decoded_token[0]['permissions']
