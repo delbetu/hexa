@@ -22,8 +22,7 @@ class Authorizer
   # Remembers authorized user
   def authorize(email:, password:)
     encrypted_password = BCrypt::Password.create(password)
-    # TODO: filters instead of filter???
-    result = authorization_data.read(filter: [email: email, password: encrypted_password])
+    result = authorization_data.read(filters: [email: email, password: encrypted_password])
     raise Authorizer::NotAuthorizedError if result.empty?
     @authorized_user = result.first
   end

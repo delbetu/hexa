@@ -1,4 +1,4 @@
 module AuthDataProviderPort
-  def read(filter:)
+  def read(filters:)
   end
 end
