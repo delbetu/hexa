@@ -1,6 +1,3 @@
-require 'shared/adapters/sequel/crud'
+require 'shared/adapters/users_adapter'
 
-module UserCreatorAdapter
-  extend ::Adapters::Sequel::Crud
-  with(table: :users, array_column: :roles)
-end
+UserCreatorAdapter = Adapters::Users

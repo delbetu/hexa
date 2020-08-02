@@ -14,7 +14,7 @@ class Authorizer
   }.freeze
 
   # authorization_data: Crud data source with email, password
-  def initialize(authorization_data: Adapters::Users)
+  def initialize(authorization_data: AuthDataProviderAdapter)
     @authorization_data = authorization_data
   end
 
