@@ -1,6 +1,6 @@
 require "shared/authorization/infrastructure/auth_data_provider_adapter"
 require "shared/authorization/authorizer"
-require "sign_in/flow"
+require "sign_in/app/flow"
 
 get '/sign_in' do
   # Gather Input ( params, db or external resource)

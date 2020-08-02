@@ -1,4 +1,4 @@
-require 'sign_up/sign_up'
+require 'sign_up/app/sign_up'
 require 'sign_up/infrastructure/user_creator_adapter'
 
 class UsersSerializer
