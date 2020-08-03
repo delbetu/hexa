@@ -1,2 +1,3 @@
-require 'load_api_persistence'
+require 'load_gems'
+require 'api'
 run Sinatra::Application
