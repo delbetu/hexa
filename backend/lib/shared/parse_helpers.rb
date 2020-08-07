@@ -1,24 +1,25 @@
+require 'shared/authorization/authorizer'
+require 'shared/errors'
+
 module ParseHelpers
   def parse_email(email)
     regexp = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
-    raise ArgumentError, "Malformed email" unless email.match(regexp)
+    raise EndUserError, "Malformed email" unless email.match(regexp)
     email
   end
 
   def parse_name(name)
-    # TODO: not numbers
-    # TODO: max length 100
+    name = name.to_s
+    raise EndUserError, "Name too long. 200 characters max." if name.length > 200
     name
   end
 
   def parse_roles(roles)
-    # TODO: roles is an array of strings
-    # TODO: reject entries that are not present in available roles
-    roles
-  end
+    roles = Array(roles).map(&:to_sym)
+    roles.each do |role|
+      raise EndUserError, "Role does not exist." unless Authorizer::ROLES.include?(role)
+    end
 
-  def parse_password(password)
-    # TODO: check that password must be encoded
-    password
+    roles
   end
 end

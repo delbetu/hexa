@@ -6,7 +6,7 @@ module Domain
     def self.parse(email:, password: "", name:, roles: [])
       new(
         email: parse_email(email),
-        password: parse_password(password),
+        password: password,
         name: parse_name(name),
         roles: parse_roles(roles)
       )
