@@ -1,6 +1,4 @@
 module Domain
-  # Struct implements to_h
-  # TODO:
   User = Struct.new(:email, :password, :name, :roles, keyword_init: true) do
     extend ParseHelpers
 

@@ -7,8 +7,7 @@ describe 'post /users' do
   it 'creates a user' do
     batman = build_user.with(name: 'Batman').build
 
-    # TODO: add test support helper: token_with_permissions('sign_up')
-    header 'Authorization', Token.encode({'permissions' => ['sign_up']})
+    header 'Authorization', token_with_permissions('sign_up')
     post '/users', user: batman
 
     expect(last_response).to be_ok
