@@ -1,4 +1,5 @@
 require 'sign_in/domain/user_credentials'
+require 'shared/errors'
 
 class SignInFlow
   # Inject collaborators dependencies
@@ -20,7 +21,7 @@ class SignInFlow
     # TODO: make authorizer to return encoded token.
     result.token = authorizer.get_token
     result
-  rescue Authorizer::NotAuthorizedError, ArgumentError => e
+  rescue Authorizer::NotAuthorizedError, EndUserError => e
     result = SignInResult.new
     result.success = false
     result.error = { 'messages' => [ e.message ] }

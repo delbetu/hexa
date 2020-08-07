@@ -100,11 +100,12 @@ module Adapters
 
       private
 
+      # some attributes can be stored in PG as array type
+      # those attributes need to be converted(.pg_array) before saving them
+      # activate array_column option for those columns
       def fix_array_column(attributes)
         return unless @array_column
-        # when generic crud is used with option array_column
-        # it standarizes the input as pg_array as required
-        attributes[@array_column.to_sym] = attributes[@array_column]&.pg_array || [] if @array_column
+        attributes[@array_column.to_sym] = attributes[@array_column].map(&:to_s)&.pg_array || []
       end
     end
   end

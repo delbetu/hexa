@@ -1,5 +1,6 @@
 require 'sign_up/domain/user'
 require 'sign_up/domain/user_creator_port'
+require 'logger'
 
 class SignUp
   def self.call(user_attributes, access_token, creator: UserCreatorPort)
@@ -16,9 +17,15 @@ class SignUp
     # TODO: send_confirmation_link(user_created) # creates a pending confirmation
 
     OpenStruct.new(user_created.merge(success?: true))
-  # rescue UserError
-    # TODO: do not show details of all errors to users
-  rescue => e # error_handling
-    OpenStruct.new(user_created.merge(success?: false, errors: e.message))
+
+    # error_handling
+  rescue EndUserError => e
+    OpenStruct.new(success?: false, errors: e.message)
+  rescue => e
+    logger = Logger.new("#{APP_ROOT}/log/development.log")
+    logger.error("[SignUp] Unhandled error happened ")
+    logger.error(e.message)
+    logger.error(e.backtrace)
+    OpenStruct.new(success?: false, errors: e.message)
   end
 end

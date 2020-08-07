@@ -13,7 +13,7 @@ module Domain
     # ensures that user credentials must meet the domain constraints (data and structural)
     def initialize(email:, password:)
       @email = parse_email(email)
-      @password = parse_password(password)
+      @password = password
     end
 
     def [](key)

@@ -4,6 +4,7 @@ require 'shared/errors'
 module ParseHelpers
   def parse_email(email)
     regexp = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
+
     raise EndUserError, "Malformed email" unless email.match(regexp)
     email
   end
