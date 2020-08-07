@@ -21,7 +21,5 @@ module Domain
 end
 
 def User(attributes)
-  # TODO: extend hash to implement symbolize_keys (same as rails does)
-  symbolic_hash = attributes.map { |k, v| [k.to_sym, v]  }.to_h
-  Domain::User.parse(symbolic_hash)
+  Domain::User.parse(**attributes.symbolize_keys)
 end
