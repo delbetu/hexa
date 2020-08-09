@@ -1,6 +1,6 @@
 require 'shared/authorization/domain/token'
+require 'shared/authorization/domain/password'
 require 'shared/ports'
-require 'bcrypt'
 
 class Authorizer
   NotAuthorizedError = Class.new(StandardError)
@@ -21,10 +21,13 @@ class Authorizer
   # Verify that the credentials are legitimate
   # Remembers authorized user
   def authorize(email:, password:)
-    encrypted_password = BCrypt::Password.create(password)
-    result = authorization_data.read(filters: [email: email, password: encrypted_password])
-    raise Authorizer::NotAuthorizedError if result.empty?
-    @authorized_user = result.first
+    user = authorization_data.read(filters: [email: email]).first
+    raise Authorizer::NotAuthorizedError unless user
+
+    password_matches = (Password.decrypt(user[:password]) == password)
+
+    raise Authorizer::NotAuthorizedError unless password_matches
+    @authorized_user = user
   end
 
   def get_permissions

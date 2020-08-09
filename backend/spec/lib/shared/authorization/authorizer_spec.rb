@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'shared/authorization/authorizer'
 
 describe Authorizer do
-  let(:pwd) { '$2a$12$P96rj9YOWNtHwN8lNnq4oOeRO0KMENX1neqDYFSUFw9UbfbKtmeXG' }
+  let(:pwd_hash) { UserBuilder.pwd_hash_for(:pass123!) }
   subject { Authorizer.new(authorization_data: user_crud) }
 
   describe '#authorize' do
@@ -11,19 +11,19 @@ describe Authorizer do
 
       it 'raise not-authorized' do
         expect {
-          subject.authorize(email: 'bruce.wayne@gotham.com', password: pwd)
+          subject.authorize(email: 'bruce.wayne@gotham.com', password: 'dontcare')
         }.to raise_error(Authorizer::NotAuthorizedError)
       end
     end
 
     context 'when user exists with the given credentials' do
-      let(:user) { { email: 'bruce.wayne@gotham.com', password: pwd } }
+      let(:user) { { email: 'bruce.wayne@gotham.com', password: pwd_hash } }
       let(:user_crud) do
         double('user_crud', read: [user])
       end
 
       it 'stores the authorized user' do
-        subject.authorize(email: 'bruce.wayne@gotham.com', password: 'other')
+        subject.authorize(email: 'bruce.wayne@gotham.com', password: 'pass123!')
 
         expect(subject.send(:authorized_user)).to eq(user)
       end
@@ -31,7 +31,7 @@ describe Authorizer do
   end
 
   describe 'get_permissions' do
-    let(:user) { { email: 'bruce.wayne@gotham.com', password: pwd, roles: [:hr, :candidate] } }
+    let(:user) { { email: 'bruce.wayne@gotham.com', password: pwd_hash, roles: [:hr, :candidate] } }
     let(:user_crud) do
       double('user_crud', read: [user])
     end
@@ -46,7 +46,7 @@ describe Authorizer do
 
     context 'when user is already authorized' do
       before do
-        subject.authorize(email: user[:email], password: user[:password])
+        subject.authorize(email: user[:email], password: 'pass123!')
       end
 
       it 'returns a list with all the permissions for all the user roles' do
@@ -82,7 +82,7 @@ describe Authorizer do
 
     context 'when user is already authorized' do
       before do
-        subject.authorize(email: user[:email], password: user[:password])
+        subject.authorize(email: user[:email], password: 'pass123!')
       end
 
       it 'updates the roles for the authorized user' do

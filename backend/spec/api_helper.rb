@@ -1,6 +1,5 @@
 # Test endpoints end to end
 require 'rack/test'
-require 'api'
 
 def app
   Sinatra::Application.new

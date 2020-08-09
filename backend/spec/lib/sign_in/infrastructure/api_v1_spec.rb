@@ -1,5 +1,7 @@
 require 'spec_helper'
 require 'api_helper'
+require 'persistence_helper'
+require 'sign_in'
 
 # TODO: should be post ?
 describe "GET /sign_in" do
@@ -7,7 +9,7 @@ describe "GET /sign_in" do
     # TODO: use domain factories to ensure valid user
     Adapters::Users.create(
       build_user.with(
-        name: 'Batman', email: 'bruce.wayne@gotham.com', password: 'batcave', roles: ['hr']
+        name: 'Batman', email: 'bruce.wayne@gotham.com', password: encrypt_pwd('batcave'), roles: ['hr']
       ).build
     )
 

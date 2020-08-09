@@ -9,7 +9,12 @@ class UserBuilder
   attr_reader :user
 
   def initialize
-    @user = { name: 'Batman', email: 'bruce@batcave.com', password: pwd, roles: ['hr'] }
+    @user = {
+      name: 'Batman',
+      email: 'bruce@batcave.com',
+      password: UserBuilder.pwd_hash_for(:pass123!),
+      roles: ['hr']
+    }
   end
 
   def with(attr_value_hash = {})
@@ -22,9 +27,7 @@ class UserBuilder
     @user
   end
 
-  private
-
-  def pwd
-    BCrypt::Password.create('pass123!')
+  def self.pwd_hash_for(pwd)
+    { pass123!: '$2a$12$MkCyyU7mqYjzKJZ2lS/ckOmYWp3FyV0UwH//T6G0/uod0/x4KnwwK' }[pwd]
   end
 end
