@@ -1,5 +1,6 @@
 # Test persistence with test database
 require 'sequel_connect'
+# TODO: use an in-memory database implementation
 
 RSpec.configure do |config|
   config.around(:each) do |example|

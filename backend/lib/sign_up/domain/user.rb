@@ -1,3 +1,5 @@
+require 'shared/parse_helpers'
+
 module Domain
   User = Struct.new(:email, :password, :name, :roles, keyword_init: true) do
     extend ParseHelpers

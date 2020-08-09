@@ -7,8 +7,7 @@ class UsersSerializer
 end
 
 post '/users' do
-  token = request.env['HTTP_AUTHORIZATION']
   user_attributes = params[:user]
-  new_user = SignUp.call(user_attributes, token, creator: UserCreatorAdapter)
+  new_user = SignUp.call(user_attributes, creator: UserCreatorAdapter)
   UsersSerializer.new(new_user).serialized_json
 end

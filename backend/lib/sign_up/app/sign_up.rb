@@ -3,11 +3,8 @@ require 'sign_up/domain/user_creator_port'
 require 'logger'
 
 class SignUp
-  def self.call(user_attributes, access_token, creator: UserCreatorPort)
-    # authorization
-    decoded_token = Token.decode(access_token)
-    permissions = decoded_token[0]['permissions']
-    raise Authorizer::NotAuthorizedError unless permissions.include?('sign_up')
+  def self.call(user_attributes, creator: UserCreatorPort)
+    # authorization Anybody can signup
 
     # parsing
     parsed_user = User(user_attributes)
@@ -22,6 +19,7 @@ class SignUp
   rescue EndUserError => e
     OpenStruct.new(success?: false, errors: e.message)
   rescue => e
+    # TODO: should this be handled in the api ???
     logger = Logger.new("#{APP_ROOT}/log/development.log")
     logger.error("[SignUp] Unhandled error happened ")
     logger.error(e.message)
