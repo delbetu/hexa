@@ -10,10 +10,9 @@ module Adapters
     module Crud
       extend ::Ports::Crud
 
-      # TODO: don't default to nil
-      def with(table:, array_column: nil)
+      def with(table:, json_columns: [])
         @table = table.freeze
-        @array_column = array_column.freeze
+        @json_columns = json_columns.freeze
       end
 
       def entity_name
@@ -21,8 +20,10 @@ module Adapters
       end
 
       def create(attributes)
+        attributes = serialize_json_columns(attributes, @json_columns)
+
         attributes = attributes.transform_keys(&:to_sym)
-        fix_array_column(attributes)
+        # fix_array_column(attributes)
         id = DB[@table].insert(attributes)
         attributes.merge!(id: id)
         attributes
@@ -69,13 +70,14 @@ module Adapters
 
         # TODO: Include total number on result and the fetched number
         # so we can do: showing 10 of 1892
-        result.all
+        deserialize_collection(result.all, @json_columns)
       end
 
       # returns only the affected attributes
       def update(attributes)
         id = attributes.delete(:id)
         raise Adapters::UpdateError, "id is required for update" unless id
+        attributes = serialize_json_columns(attributes, @json_columns)
 
         affected_rows = DB[@table].where(id: id).update(attributes)
         raise Adapters::UpdateError, "#{entity_name} with id: #{id} not found" if affected_rows == 0
@@ -100,12 +102,30 @@ module Adapters
 
       private
 
-      # some attributes can be stored in PG as array type
-      # those attributes need to be converted(.pg_array) before saving them
-      # activate array_column option for those columns
-      def fix_array_column(attributes)
-        return unless @array_column
-        attributes[@array_column.to_sym] = attributes[@array_column].map(&:to_s)&.pg_array || []
+      def serialize_json_columns(hash, json_columns)
+        hash = hash.clone # do not mutate parameter
+        json_columns.each do |col|
+          next unless hash[col]
+
+          hash[col] = hash[col].to_json
+        end
+        hash
+      end
+
+      def deserialize_collection(array_of_hashes, json_columns)
+        array_of_hashes.map do |hash|
+          deserialize_json_columns(hash, json_columns)
+        end
+      end
+
+      def deserialize_json_columns(hash, json_columns)
+        hash = hash.clone # do not mutate parameter
+        json_columns.each do |col|
+          next unless hash[col]
+
+          hash[col] = JSON.parse(hash[col])
+        end
+        hash
       end
     end
   end

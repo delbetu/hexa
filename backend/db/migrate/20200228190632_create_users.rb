@@ -7,8 +7,8 @@ Sequel.migration do
       String :name, null: false
       String :email, null: false, unique: true
       String :password, null: false
+      String :roles, null: false
     end
-
-    alter_table(:users){add_column :roles, 'text[]'}
+    alter_table (:users) { set_column_default :roles, "[]" }
   end
 end

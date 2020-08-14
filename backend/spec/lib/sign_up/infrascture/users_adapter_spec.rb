@@ -4,39 +4,42 @@ require 'shared/adapters/users_adapter'
 describe Adapters::Users do
   describe '.read' do
     let!(:user1) {
-      Adapters::Users.create(
-        build_user.build
-      )
+      build_user.build
     }
     let!(:user2) {
-      Adapters::Users.create(
-        build_user.with(name: 'Pepe', email: 'my@email.com').build
-      )
+      build_user.with(name: 'Pepe', email: 'my@email.com').build
     }
+
+    before do
+      Adapters::Users.create(user1)
+      Adapters::Users.create(user2)
+    end
 
     it 'fetches all when no args are passed' do
       result = described_class.read
       expect(result.length).to eq(2)
-      expect(result).to match_array([ user1, user2 ])
+      expect(result[0]).to match(hash_including(user1))
+      expect(result[1]).to match(hash_including(user2))
     end
 
     it 'can filter by name AND email' do
       result = described_class.read(filters: [ { name: 'Pepe', email: 'my@email.com' } ])
       expect(result.length).to eq(1)
-      expect(result).to match_array([ user2 ])
+      expect(result[0]).to match(hash_including(user2))
     end
 
     # TODO PENDING support OR on filters
     xit 'can filter by name OR email' do
       result = described_class.read(filters: [ { name: user1['name'] }, { email: user2['email'] } ])
       expect(result.length).to eq(2)
-      expect(result).to match_array([ user1, user2 ])
+      expect(result[0]).to match(hash_including(user1))
+      expect(result[1]).to match(hash_including(user2))
     end
 
     it 'can paginate' do
       result = described_class.read(pagination: { page: 2, per_page: 1 })
       expect(result.length).to eq(1)
-      expect(result).to match_array([ user2 ])
+      expect(result[0]).to match(hash_including(user2))
     end
 
     it 'can be sorted asc' do
