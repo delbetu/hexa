@@ -7,8 +7,9 @@ require 'sign_up'
 describe 'post /users' do
   it 'creates a user' do
     batman = build_user.with(name: 'Batman').build
+    json_body = { user: batman }.to_json
 
-    post '/users', user: batman
+    post '/users', json_body, { 'HTTP_ACCEPT' => 'application/json', 'CONTENT_TYPE' => 'application/json' }
 
     expect(last_response).to be_ok
     content = JSON.parse(last_response.body)
