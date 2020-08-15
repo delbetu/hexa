@@ -3,13 +3,23 @@ require 'sign_up/infrastructure/user_creator_adapter'
 
 class UsersSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :name, :email
+  attributes :name, :email
+end
+
+class ErrorsSerializer
+  include FastJsonapi::ObjectSerializer
+  attributes :errors
 end
 
 post '/users' do
   body = request.body.read.to_s
   user_attributes = params[:user] || JSON.parse(body)['user'] # accept form data or json
 
-  new_user = SignUp.call(user_attributes, creator: UserCreatorAdapter)
-  UsersSerializer.new(new_user).serialized_json
+  result = SignUp.call(user_attributes, creator: UserCreatorAdapter)
+
+  if result.success?
+    UsersSerializer.new(result)
+  else
+    ErrorsSerializer.new(result)
+  end.serialized_json
 end
