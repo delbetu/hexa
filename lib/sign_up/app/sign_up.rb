@@ -1,6 +1,5 @@
 require 'sign_up/domain/user'
 require 'sign_up/domain/user_creator_port'
-require 'logger'
 
 class SignUp
   def self.call(user_attributes, creator: UserCreatorPort)
@@ -21,15 +20,10 @@ class SignUp
   rescue => e
     if (ENV['RACK_ENV'] == 'production')
       Raven.capture_exception(e)
-
-      # TODO: Report error to AppMonitor
-      logger = Logger.new("#{APP_ROOT}/log/development.log")
-      logger.error("[SignUp] Unhandled error happened ")
-      logger.error(e.message)
-      logger.error(e.backtrace)
-      OpenStruct.new(success?: false, errors: e.message)
+      # End user doesn't receive a stacktrace
+      OpenStruct.new(success?: false, errors: "Error when signing up #{user_attributes}. Please try again later.")
     else
-      raise e
+      raise e # Developer needs to track the issue.
     end
   end
 end
