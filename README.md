@@ -1,14 +1,14 @@
-## Starting up de application
+## Starting up the application
 
 Starts a web server connected to a database
 
 ```shell
-$> ./bin/run_app
+$> docker-compose up --build
 ```
 
 ## IRB console
 
-Loads gems, files under /lib and sequel
+Loads gems, files under /lib
 
 ```shell
 $>  ./bin/console
@@ -55,10 +55,9 @@ $> cat db/schema.rb
 ```
 
 ### Running tests
+Tests recreate a sqlite in memory db when running them.  
 
 ```shell
-$> RACK_ENV = test ./bin/db/create
-$> RACK_ENV = test ./bin/db/migrate
 $> bundle exec rspec
 ```
 
@@ -71,7 +70,7 @@ $> ./bin/db/seed
 ### List Tables
 
 ```shell
-./bin/db/tables
+$> ./bin/db/tables
 ```
 
 ## Deploying to Heroku
