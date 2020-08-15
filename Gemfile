@@ -12,6 +12,7 @@ gem 'jwt'
 gem 'sequel'
 gem 'sinatra'
 gem 'sidekiq'
+gem 'sentry-raven'
 
 group :test do
   gem 'capybara'

@@ -20,6 +20,8 @@ class SignUp
     OpenStruct.new(success?: false, errors: e.message)
   rescue => e
     if (ENV['RACK_ENV'] == 'production')
+      Raven.capture_exception(e)
+
       # TODO: Report error to AppMonitor
       logger = Logger.new("#{APP_ROOT}/log/development.log")
       logger.error("[SignUp] Unhandled error happened ")

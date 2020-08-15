@@ -8,6 +8,7 @@ before do
 end
 
 error do
+  Raven.capture_exception(env['sinatra.error'].message)
   # Server error 5xx
   {
     status: 500,
@@ -22,6 +23,7 @@ error do
 end
 
 not_found do
+  Raven.capture_exception(env['sinatra.error'].message)
   # Client error 4xx
   {
     status: 404,
