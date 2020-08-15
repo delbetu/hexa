@@ -1,0 +1,22 @@
+{
+	"variables": [],
+	"info": {
+		"name": "HeadHunt",
+		"_postman_id": "c181916e-3f93-ba53-5cff-bcb3759b4fe8",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "sign_up",
+			"request": {
+				"url": "",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

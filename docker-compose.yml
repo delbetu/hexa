@@ -23,14 +23,14 @@ services:
   #   container_name: "hexa_sidekiq"
   #   depends_on:
   #     - redis
-  #   build: backend
+  #   build: .
   #   env_file:
-  #     - backend/.env
+  #     - .env
   #   environment:
   #     - REDIS_URL=redis://redis:6379/0
   #     - BUNDLE_PATH=/hexa_app/vendor/bundle
   #   volumes:
-  #     - ./backend:/hexa_app
+  #     - .:/hexa_app
   #   command: bundle exec sidekiq -r ./worker.rb
 
   rack:
@@ -38,15 +38,15 @@ services:
     depends_on:
       - postgres
       # - sidekiq
-    build: backend
+    build: .
     ports:
       - 3000:3000
     env_file:
-      - backend/.env
+      - .env
     environment:
       - RACK_ENV=docker
     volumes:
-      - ./backend:/hexa_app:rw
+      - .:/hexa_app:rw
     user: 1000:1000
     command: bundle exec rackup -I lib -I app -p 3000 -o 0.0.0.0
 
