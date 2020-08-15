@@ -1,0 +1,2 @@
+- [ ] Sign Up improve error when email is already taken.
+- [ ]
