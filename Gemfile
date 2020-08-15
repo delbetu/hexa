@@ -23,4 +23,5 @@ group :test, :development do
   gem 'dotenv'
   gem 'byebug'
   gem 'sqlite3'
+  gem 'shotgun'
 end

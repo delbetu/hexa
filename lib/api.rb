@@ -7,6 +7,10 @@ before do
   headers 'Access-Control-Allow-Origin' => '*'
 end
 
+get '/' do
+  "Welcome to Hexa."
+end
+
 error do
   Raven.capture_exception(env['sinatra.error'].message)
   # Server error 5xx

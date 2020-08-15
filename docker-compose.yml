@@ -48,7 +48,7 @@ services:
     volumes:
       - .:/hexa_app:rw
     user: 1000:1000
-    command: bundle exec rackup -I lib -I app -p 3000 -o 0.0.0.0
+    command: bundle exec shotgun -I lib -I app -p 3000 -o 0.0.0.0
 
   # webpack_dev:
   #   container_name: "hexa_webpack"
