@@ -9,7 +9,6 @@ gem 'pg'
 gem 'pry'
 gem 'rake'
 gem 'jwt'
-gem 'sqlite3'
 gem 'sequel'
 gem 'sinatra'
 gem 'sidekiq'
@@ -22,4 +21,5 @@ end
 group :test, :development do
   gem 'dotenv'
   gem 'byebug'
+  gem 'sqlite3'
 end
