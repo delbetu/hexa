@@ -1,11 +1,7 @@
 require 'shared/ports'
+require 'shared/errors'
 
 module Adapters
-  class Error < StandardError; end
-  class CreateError < Error; end
-  class UpdateError < Error; end
-  class DeleteError < Error; end
-
   module Sequel
     module Crud
       extend ::Ports::Crud
@@ -29,7 +25,7 @@ module Adapters
         attributes
       rescue ::Sequel::DatabaseError => e
         # TODO: Inject a logger in persistence and Log message and stacktrace
-        raise Adapters::CreateError, "Error creating #{entity_name} with #{attributes}"
+        raise CreateError, "Error creating #{entity_name} with #{attributes}"
       end
 
       def read(options = {})
@@ -76,28 +72,28 @@ module Adapters
       # returns only the affected attributes
       def update(attributes)
         id = attributes.delete(:id)
-        raise Adapters::UpdateError, "id is required for update" unless id
+        raise UpdateError, "id is required for update" unless id
         attributes = serialize_json_columns(attributes, @json_columns)
 
         affected_rows = DB[@table].where(id: id).update(attributes)
-        raise Adapters::UpdateError, "#{entity_name} with id: #{id} not found" if affected_rows == 0
+        raise UpdateError, "#{entity_name} with id: #{id} not found" if affected_rows == 0
 
         attributes.merge!(id: id)
         attributes
       rescue ::Sequel::DatabaseError => e
         # TODO: Inject a logger in persistence and Log message and stacktrace
-        raise Adapters::UpdateError, "Error updating #{entity_name} with #{attributes}"
+        raise UpdateError, "Error updating #{entity_name} with #{attributes}"
       end
 
       def delete(id:)
         row_to_delete = DB[@table].where(id: id).first
         affected_rows = DB[@table].where(id: id).delete
-        raise Adapters::DeleteError, "#{entity_name} with id: #{id} not found" if affected_rows == 0
+        raise DeleteError, "#{entity_name} with id: #{id} not found" if affected_rows == 0
 
         row_to_delete
       rescue ::Sequel::DatabaseError => e
         # TODO: Inject a logger in persistence and Log message and stacktrace
-        raise Adapters::DeleteError, "Error deleting #{entity_name} with #{attributes}"
+        raise DeleteError, "Error deleting #{entity_name} with #{attributes}"
       end
 
       private

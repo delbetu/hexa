@@ -82,7 +82,7 @@ describe Adapters::Users do
       attributes = { name: 'Batman', email: 'bruce@batcave.com', pwd: 'passs' }
       expect {
         Adapters::Users.create(build_user.with(attributes).build)
-      }.to raise_error(Adapters::CreateError, /Error creating User with.*passs.*/)
+      }.to raise_error(CreateError, /Error creating User with.*passs.*/)
     end
   end
 
@@ -108,14 +108,14 @@ describe Adapters::Users do
 
       expect {
         Adapters::Users.update(id: user[:id], no_existing_attribute: 222)
-      }.to raise_error Adapters::UpdateError
+      }.to raise_error UpdateError
     end
 
     it 'fails when no id is passed' do
       attributes = { name: 'Batman', email: 'bruce@batcave.com' }
       expect {
         Adapters::Users.update(attributes)
-      }.to raise_error(Adapters::UpdateError, "id is required for update")
+      }.to raise_error(UpdateError, "id is required for update")
     end
 
     it 'fails when id does not exists' do
@@ -123,7 +123,7 @@ describe Adapters::Users do
 
       expect {
         Adapters::Users.update(attributes)
-      }.to raise_error(Adapters::UpdateError, "User with id: #{attributes[:id]} not found")
+      }.to raise_error(UpdateError, "User with id: #{attributes[:id]} not found")
     end
   end
 
@@ -145,7 +145,7 @@ describe Adapters::Users do
     it 'fails when trying to delete an non existing row' do
       expect {
         Adapters::Users.delete(id: 9999999)
-      }.to raise_error Adapters::DeleteError, 'User with id: 9999999 not found'
+      }.to raise_error DeleteError, 'User with id: 9999999 not found'
     end
 
     it 'fails when no id is passed' do
