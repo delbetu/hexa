@@ -13,6 +13,8 @@ gem 'sequel'
 gem 'sinatra'
 gem 'sidekiq'
 gem 'sentry-raven'
+gem 'graphql'
+gem 'rack-contrib'
 
 group :test do
   gem 'capybara'

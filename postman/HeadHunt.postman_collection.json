@@ -8,12 +8,41 @@
 	},
 	"item": [
 		{
-			"name": "sign_up",
+			"name": "Sign Up",
 			"request": {
-				"url": "",
-				"method": "GET",
-				"header": [],
-				"body": {},
+				"url": "{{BASE_URL}}/users",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user\": {\n\t\t\"email\": \"some@email.com\",\n\t\t\"password\": \"Pass!@#$\",\n\t\t\"name\": \"John Smith\",\n\t\t\"roles\": [\"hr\"]\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "[GQL] List Users",
+			"request": {
+				"url": "{{BASE_URL}}/graphql",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"query\": \"{ users { email name } }\"\n}"
+				},
 				"description": ""
 			},
 			"response": []

@@ -28,6 +28,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     fast_jsonapi (1.5)
       activesupport (>= 4.2)
+    graphql (1.11.3)
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
     jwt (2.2.1)
@@ -46,6 +47,8 @@ GEM
       method_source (~> 1.0)
     public_suffix (4.0.5)
     rack (2.2.3)
+    rack-contrib (2.2.0)
+      rack (~> 2.0)
     rack-protection (2.0.8.1)
       rack
     rack-test (1.1.0)
@@ -99,9 +102,11 @@ DEPENDENCIES
   capybara
   dotenv
   fast_jsonapi
+  graphql
   jwt
   pg
   pry
+  rack-contrib
   rake
   rspec
   sentry-raven
