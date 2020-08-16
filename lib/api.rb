@@ -44,8 +44,48 @@ class UsersQuery < GraphQL::Schema::Object
     Adapters::Users.read
   end
 end
+
+require 'sign_up/app/sign_up'
+require 'sign_up/infrastructure/user_creator_adapter'
+module Mutations
+  class BaseMutation < GraphQL::Schema::Mutation
+  end
+  class SignUp < BaseMutation
+    description "Creates a user"
+    # Input
+    argument :name, String, required: true
+    argument :email, String, required: true
+    argument :password, String, required: true
+
+    # Output
+    field :success, Boolean, null: false
+    field :errors, [String], null: false
+
+    def resolve(name:, email:, password:)
+      user_attributes = { name: name, email: email, password: password }
+      result = ::SignUp.call(user_attributes, creator: UserCreatorAdapter)
+      if result.success?
+        {
+          success: true,
+          errors: []
+        }
+      else
+        {
+          success: false,
+          errors: ['Ramdom Error']
+        }
+      end
+    end
+  end
+end
+class UserSignUp < GraphQL::Schema::Object
+  description "Signup user"
+
+  field :sign_up, mutation: Mutations::SignUp
+end
 class GraphqlEndpoint < GraphQL::Schema
   query UsersQuery
+  mutation UserSignUp
 end
 
 require 'rack/contrib'
@@ -54,10 +94,11 @@ require 'rack/contrib'
 
 post '/graphql' do
   data = JSON.parse(request.body.read)
+  vars = data['variables'] || {}
   logger.info("Graphql data: #{data}")
   result = GraphqlEndpoint.execute(
     data['query'],
-    variables: data['variables'],
+    variables: vars,
     context: { current_user: nil  },
   )
   logger.info("Graphql result: #{result.to_h}")
