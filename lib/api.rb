@@ -1,6 +1,6 @@
 require 'sinatra'
 require_relative 'sign_in/infrastructure/api_v1'
-require_relative 'sign_up/infrastructure/api_v1'
+require_relative 'sign_up/infrastructure/rest/api_v1'
 
 before do
   headers 'Access-Control-Allow-Origin' => 'http://localhost:8080'
@@ -32,6 +32,10 @@ module Types
     field :email, String, null: true
   end
 end
+module Mutations
+  class BaseMutation < GraphQL::Schema::Mutation
+  end
+end
 
 require 'shared/adapters/users_adapter'
 require 'ostruct'
@@ -45,44 +49,7 @@ class UsersQuery < GraphQL::Schema::Object
   end
 end
 
-require 'sign_up/app/sign_up'
-require 'sign_up/infrastructure/user_creator_adapter'
-module Mutations
-  class BaseMutation < GraphQL::Schema::Mutation
-  end
-  class SignUp < BaseMutation
-    description "Creates a user"
-    # Input
-    argument :name, String, required: true
-    argument :email, String, required: true
-    argument :password, String, required: true
-
-    # Output
-    field :success, Boolean, null: false
-    field :errors, [String], null: false
-
-    def resolve(name:, email:, password:)
-      user_attributes = { name: name, email: email, password: password }
-      result = ::SignUp.call(user_attributes, creator: UserCreatorAdapter)
-      if result.success?
-        {
-          success: true,
-          errors: []
-        }
-      else
-        {
-          success: false,
-          errors: ['Ramdom Error']
-        }
-      end
-    end
-  end
-end
-class UserSignUp < GraphQL::Schema::Object
-  description "Signup user"
-
-  field :sign_up, mutation: Mutations::SignUp
-end
+require 'sign_up/infrastructure/graphql/api_v1'
 class GraphqlEndpoint < GraphQL::Schema
   query UsersQuery
   mutation UserSignUp

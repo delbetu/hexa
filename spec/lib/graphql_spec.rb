@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'api_helper'
 require 'persistence_helper'
 require 'api'
-
 require 'shared/adapters/users_adapter'
 
 describe 'graphql reading users' do

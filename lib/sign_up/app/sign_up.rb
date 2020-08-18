@@ -16,12 +16,12 @@ class SignUp
 
     # error_handling
   rescue EndUserError => e
-    OpenStruct.new(id: "Sign Up Error", success?: false, errors: e.message)
+    OpenStruct.new(id: "Sign Up Error", success?: false, errors: [ e.message ])
   rescue => e
     if (ENV['RACK_ENV'] == 'production')
       Raven.capture_exception(e)
       # End user doesn't receive a stacktrace
-      OpenStruct.new(id: "Sign Up Error", success?: false, errors: "Error when signing up #{user_attributes}. Please try again later.")
+      OpenStruct.new(id: "Sign Up Error", success?: false, errors: [ "Error when signing up #{user_attributes}. Please try again later." ])
     else
       raise e # Developer needs to track the issue.
     end

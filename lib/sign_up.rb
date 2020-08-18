@@ -1,1 +1,1 @@
-require 'sign_up/infrastructure/api_v1'
+require 'sign_up/infrastructure/rest/api_v1'
