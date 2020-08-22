@@ -21,6 +21,6 @@ describe ParseHelpers do
       subject.parse_roles('non-existing-role')
     }.to raise_error(EndUserError, /role/i)
 
-    expect(subject.parse_roles('hr')).to eq([:hr])
+    expect(subject.parse_roles('hr')).to eq(['hr'])
   end
 end

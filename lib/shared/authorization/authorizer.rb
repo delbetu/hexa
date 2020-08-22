@@ -5,8 +5,9 @@ require 'shared/ports'
 class Authorizer
   NotAuthorizedError = Class.new(StandardError)
 
+  # TODO: Use string for roles
   USER_ROLE = { 'bruce.wayne@gotham.com' => [:hr] }.freeze
-  ROLES = [:hr].freeze
+  ROLES = [:hr, :guest].freeze
   FEATURES = [:sign_in, :sign_up].freeze
   PERMISSIONS = {
     hr: [:sign_in, :sign_up],
