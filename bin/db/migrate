@@ -4,6 +4,9 @@ case $RACK_ENV in
   "test")
     source .env.test
     ;;
+  "production")
+    # In production vars are configured in heroku settings
+    ;;
   *)
     source .env
     ;;
