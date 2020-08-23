@@ -7,10 +7,10 @@ end
 
 class Hash
   def symbolize_keys
-    self.map { |k, v| [k.to_sym, v]  }.to_h
+    transform_keys(&:to_sym)
   end
 
   def stringify_keys
-    self.map { |k, v| [k.to_s, v]  }.to_h
+    transform_keys(&:to_s)
   end
 end

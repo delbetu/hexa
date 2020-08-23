@@ -16,16 +16,13 @@ module Adapters
       end
 
       def create(attributes)
-        attributes = serialize_json_columns(attributes, @json_columns)
+        attributes = serialize_json_columns(attributes, @json_columns).symbolize_keys
 
-        attributes = attributes.transform_keys(&:to_sym)
-        # fix_array_column(attributes)
         id = DB[@table].insert(attributes)
         attributes.merge!(id: id)
         attributes
       rescue ::Sequel::DatabaseError => e
         Raven.capture_exception(e)
-        # TODO: Inject a logger in persistence and Log message and stacktrace
         raise CreateError, "Error creating #{entity_name} with #{attributes}"
       end
 
