@@ -9,6 +9,8 @@ class SignUp
     parsed_user = User(user_attributes)
 
     # Perform Job chain ( in transaction mode )
+    raise EndUserError, 'Email already taken' if creator.exists?(email: parsed_user.email)
+
     user_created = creator.create(parsed_user.to_h)
     # TODO: send_confirmation_link(user_created) # creates a pending confirmation
 

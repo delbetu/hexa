@@ -4,7 +4,7 @@ require 'sign_up/app/sign_up'
 
 describe SignUp do
   let(:user_attrs) { build_user.build }
-  let(:fake_creator) { double('creator', create: user_attrs.merge(id: 999)) }
+  let(:fake_creator) { double('creator', create: user_attrs.merge(id: 999), exists?: false) }
 
   subject { SignUp.call(user_attrs, creator: fake_creator) }
 
