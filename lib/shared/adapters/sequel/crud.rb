@@ -24,6 +24,7 @@ module Adapters
         attributes.merge!(id: id)
         attributes
       rescue ::Sequel::DatabaseError => e
+        Raven.capture_exception(e)
         # TODO: Inject a logger in persistence and Log message and stacktrace
         raise CreateError, "Error creating #{entity_name} with #{attributes}"
       end
