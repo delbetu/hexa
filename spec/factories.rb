@@ -12,8 +12,7 @@ class UserBuilder
     @user = {
       name: 'Batman',
       email: 'bruce@batcave.com',
-      password: UserBuilder.pwd_hash_for(:pass123!),
-      roles: ['hr']
+      password: UserBuilder.pwd_hash_for(:pass123!)
     }
   end
 

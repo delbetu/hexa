@@ -24,23 +24,13 @@ describe Domain::User do
     end.to raise_error EndUserError, "Name too short. 2 characters min."
   end
 
-  it 'raise invalid role when roles is wrong' do
+  it 'validates required fields' do
     expect do
-      User(user_attrs.merge(roles: 'ss'))
-    end.to raise_error EndUserError, "Role does not exist."
+      User(user_attrs.except(:email))
+    end.to raise_error EndUserError, "email is required"
 
     expect do
-      User(user_attrs.merge(roles: ['ss']))
-    end.to raise_error EndUserError, "Role does not exist."
-  end
-
-    it 'validates required fields' do
-      expect do
-        User(user_attrs.except(:email))
-      end.to raise_error EndUserError, "email is required"
-
-      expect do
-        User(user_attrs.except(:password))
-      end.to raise_error EndUserError, "password is required"
+      User(user_attrs.except(:password))
+    end.to raise_error EndUserError, "password is required"
   end
 end

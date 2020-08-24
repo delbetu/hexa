@@ -1,20 +1,28 @@
 require 'sign_up/domain/user'
 require 'sign_up/domain/user_creator_port'
 
+class EmailSender
+  def self.send_confirmation(id:, name:, email:, roles:)
+  end
+end
+
 class SignUp
-  def self.call(user_attributes, creator: UserCreatorPort)
+  def self.call(user_attributes, creator: UserCreatorPort, email_sender: EmailSender, roles: ["hr"])
     # authorization Anybody can signup
 
-    # parsing
-    parsed_user = User(user_attributes)
+    # gather data & input parsing
+    parsed_user = User(user_attributes) # TODO: Get the role from the param, not from user_attributes
 
     # Perform Job chain ( in transaction mode )
     raise EndUserError, 'Email already taken' if creator.exists?(email: parsed_user.email)
 
-    user_created = creator.create(parsed_user.to_h)
-    # TODO: send_confirmation_link(user_created) # creates a pending confirmation
+    user_created = creator.create(parsed_user.to_h.merge(roles: ['guest']))
 
-    OpenStruct.new(user_created.merge(success?: true))
+    email_sender.send_confirmation(
+      **user_created.except(:password).merge(roles: roles)
+    )
+
+    OpenStruct.new(user_created.except(:password).merge(success?: true))
 
     # error_handling
   rescue EndUserError => e

@@ -2,7 +2,7 @@ require 'shared/parse_helpers'
 require 'shared/errors'
 
 module Domain
-  User = Struct.new(:email, :password, :name, :roles, keyword_init: true) do
+  User = Struct.new(:email, :password, :name, keyword_init: true) do
     extend ParseHelpers
 
     # ensures that user credentials must meet the domain constraints (data and structural)
@@ -14,13 +14,11 @@ module Domain
       raise RequiredAttributeError, 'password' if password.empty?
 
       name = attributes['name'] || ''
-      roles = attributes['roles'] || ['guest']
 
       new(
         email: parse_email(email),
         password: password,
         name: parse_name(name),
-        roles: parse_roles(roles)
       )
     end
 
