@@ -76,7 +76,7 @@ describe MyResource do
       expect(sorted_names).to match_array([ 'Product1', 'Product2' ])
     end
 
-    xit 'support no array argument for sorting' do
+    it 'support no array argument for sorting' do
       result = described_class.read(sort: { attr: 'name' })
       expect(result.length).to eq(2)
       sorted_names = result.map {|o| o.dig(:name)}

@@ -34,8 +34,9 @@ module Adapters
           # [{ name: 'a' , price: 50}] => result.where(name: 'a', price: 50)
           # [{ name: 'a' , price: 50}, {price: 100}] => result.where(name: 'a', price: 50).or(price: 100)
           first_condition = options[:filters].pop
-          result = result.where(first_condition)
           rest = options[:filters]
+
+          result = result.where(first_condition)
           rest.each do |condition|
             result = result.or(condition)
           end
@@ -49,7 +50,7 @@ module Adapters
         end
 
         if !!options[:sort]
-          sort_attributes = options.dig(:sort)
+          sort_attributes = options[:sort].is_a?(Array) ? options.dig(:sort) : [options.dig(:sort)]
 
           sort_attributes.each do |sort_option|
             attr, direction = sort_option[:attr], sort_option[:direction]
