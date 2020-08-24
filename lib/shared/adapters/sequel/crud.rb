@@ -30,10 +30,14 @@ module Adapters
         result = DB[@table]
 
         if !!options[:filters]
-          # TODO: implement failing spec
-          # filter by or
-          options[:filters].each do |filter|
-            result = result.where(filter)
+          # [{ name: 'a' }] => result.where(name: 'a')
+          # [{ name: 'a' , price: 50}] => result.where(name: 'a', price: 50)
+          # [{ name: 'a' , price: 50}, {price: 100}] => result.where(name: 'a', price: 50).or(price: 100)
+          first_condition = options[:filters].pop
+          result = result.where(first_condition)
+          rest = options[:filters]
+          rest.each do |condition|
+            result = result.or(condition)
           end
         end
 
