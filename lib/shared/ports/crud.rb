@@ -1,10 +1,9 @@
 module Ports
   module Crud
-    # TODO: remove interface use contracts
-    extend Interface
-    method :create
-    method :read
-    method :update
-    method :delete
+    def with(table:, json_columns: []); end
+    def create(attributes); end
+    def read(options = {}); end
+    def update(attributes); end
+    def delete(id:); end
   end
 end

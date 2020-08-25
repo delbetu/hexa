@@ -1,6 +1,5 @@
-# Test persistence with test database
-# require 'sequel_connect'
-# TODO: use an in-memory database implementation
+# Use an in-memory database implementation
+
 require 'sqlite3'
 DB = Sequel.sqlite
 $LOAD_PATH << "#{APP_ROOT}/lib"

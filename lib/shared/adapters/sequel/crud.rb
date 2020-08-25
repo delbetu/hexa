@@ -1,4 +1,4 @@
-require 'shared/ports'
+require 'shared/ports/crud'
 require 'shared/errors'
 
 module Adapters
@@ -84,7 +84,6 @@ module Adapters
         attributes.merge!(id: id)
         attributes
       rescue ::Sequel::DatabaseError => e
-        # TODO: Inject a logger in persistence and Log message and stacktrace
         raise UpdateError, "Error updating #{entity_name} with #{attributes}"
       end
 
@@ -95,7 +94,6 @@ module Adapters
 
         row_to_delete
       rescue ::Sequel::DatabaseError => e
-        # TODO: Inject a logger in persistence and Log message and stacktrace
         raise DeleteError, "Error deleting #{entity_name} with #{attributes}"
       end
 

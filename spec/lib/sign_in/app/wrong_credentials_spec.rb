@@ -1,5 +1,4 @@
 require 'capybara/rspec'
-require 'shared/ports'
 require 'shared/authorization/authorizer'
 require 'sign_in/app/flow'
 

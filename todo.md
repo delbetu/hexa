@@ -1,2 +1,7 @@
-- [X] Sign Up improve error when email is already taken.
-- [ ] Improve Crud
+- [X] Sign Up improve error when email is already taken
+- [X] Improve Crud
+- [ ] Crear un Reporter que encapsule Raven ( Sentry ) y el logger de heroku??, que sea visible de todos lados??
+- [ ] Borrar los port ???
+- [ ] Borrar las interfaces ???
+- [ ] Implementar los parsing de dominio con json schema???
+- [ ] Los json fixtures que se generan por los tests, no sobrescribir los ids

@@ -1,6 +1,5 @@
 require 'shared/authorization/domain/token'
 require 'shared/authorization/domain/password'
-require 'shared/ports'
 
 class Authorizer
   NotAuthorizedError = Class.new(StandardError)
