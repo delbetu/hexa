@@ -14,3 +14,25 @@ class Hash
     transform_keys(&:to_s)
   end
 end
+
+class NullObject
+  def initialize
+    @origin = caller.first
+  end
+
+  def __null_origin__
+    @origin
+  end
+
+  def method_missing(*args, &block)
+    self
+  end
+
+  def nil?
+    true
+  end
+end
+
+def Maybe(value)
+  value.nil? ? NullObject.new : value
+end
