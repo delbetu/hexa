@@ -5,13 +5,13 @@ describe Authorizer do
   let(:pwd_hash) { UserBuilder.pwd_hash_for(:pass123!) }
   subject { Authorizer.new(authorization_data: user_crud) }
 
-  describe '#authorize' do
+  describe '#authenticate' do
     context 'when user doesnt exist with the given credentials' do
       let(:user_crud) { double('user_crud', read: []) }
 
       it 'raise not-authorized' do
         expect {
-          subject.authorize(email: 'bruce.wayne@gotham.com', password: 'dontcare')
+          subject.authenticate(email: 'bruce.wayne@gotham.com', password: 'dontcare')
         }.to raise_error(Authorizer::NotAuthorizedError)
       end
     end
@@ -23,9 +23,9 @@ describe Authorizer do
       end
 
       it 'stores the authorized user' do
-        subject.authorize(email: 'bruce.wayne@gotham.com', password: 'pass123!')
+        subject.authenticate(email: 'bruce.wayne@gotham.com', password: 'pass123!')
 
-        expect(subject.send(:authorized_user)).to eq(user)
+        expect(subject.send(:authenticated_user)).to eq(user)
       end
     end
   end
@@ -46,7 +46,7 @@ describe Authorizer do
 
     context 'when user is already authorized' do
       before do
-        subject.authorize(email: user[:email], password: 'pass123!')
+        subject.authenticate(email: user[:email], password: 'pass123!')
       end
 
       it 'returns a list with all the permissions for all the user roles' do
@@ -82,14 +82,14 @@ describe Authorizer do
 
     context 'when user is already authorized' do
       before do
-        subject.authorize(email: user[:email], password: 'pass123!')
+        subject.authenticate(email: user[:email], password: 'pass123!')
       end
 
       it 'updates the roles for the authorized user' do
         expect(user_crud).to receive(:update).with(hash_including(roles: existing_roles + new_roles))
         subject.grant_access(roles: new_roles)
 
-        internal_user = subject.send(:authorized_user)
+        internal_user = subject.send(:authenticated_user)
         expect(internal_user[:roles]).to eq(existing_roles + new_roles)
       end
     end

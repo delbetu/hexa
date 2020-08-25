@@ -15,10 +15,9 @@ class SignInFlow
     # Validate Input by Parsing
     user = UserCredentials(email: email, password: password)
 
-    authorizer.authorize(email: email, password: password)
+    authorizer.authenticate(email: email, password: password)
 
     result = SignInResult.new
-    # TODO: make authorizer to return encoded token.
     result.token = authorizer.get_token
     result
   rescue Authorizer::NotAuthorizedError, EndUserError => e

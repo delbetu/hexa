@@ -19,20 +19,20 @@ class Authorizer
   end
 
   # Verify that the credentials are legitimate
-  # Remembers authorized user
-  def authorize(email:, password:)
+  # Remembers authenticated user
+  def authenticate(email:, password:)
     user = authorization_data.read(filters: [email: email]).first
     raise Authorizer::NotAuthorizedError unless user
 
     password_matches = (Password.decrypt(user[:password]) == password)
 
     raise Authorizer::NotAuthorizedError unless password_matches
-    @authorized_user = user
+    @authenticated_user = user
   end
 
   def get_permissions
-    raise Authorizer::NotAuthorizedError unless authorized_user
-    roles = authorized_user[:roles]
+    raise Authorizer::NotAuthorizedError unless authenticated_user
+    roles = authenticated_user[:roles]
 
     roles.map { |role| PERMISSIONS[role.to_sym] }.flatten.compact
   end
@@ -42,17 +42,17 @@ class Authorizer
   end
 
   def grant_access(roles: [])
-    raise Authorizer::NotAuthorizedError unless authorized_user
+    raise Authorizer::NotAuthorizedError unless authenticated_user
 
-    current_roles = authorized_user[:roles]
+    current_roles = authenticated_user[:roles]
     new_roles = current_roles + roles
 
-    resulting_roles = authorization_data.update(authorized_user.merge(roles: new_roles))
-    self.authorized_user = authorized_user.merge(resulting_roles)
+    resulting_roles = authorization_data.update(authenticated_user.merge(roles: new_roles))
+    self.authenticated_user = authenticated_user.merge(resulting_roles)
   end
 
   private
 
   attr_reader :authorization_data
-  attr_accessor :authorized_user
+  attr_accessor :authenticated_user
 end

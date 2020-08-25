@@ -19,7 +19,7 @@ feature 'User cannot identify against the system' do
 
   let(:authorizer) {
     authorizer = instance_double(Authorizer, grant_access: true)
-    allow(authorizer).to receive(:authorize)
+    allow(authorizer).to receive(:authenticate)
       .with(email: 'peter@email.com', password: 'wrong-pass')
       .and_raise(Authorizer::NotAuthorizedError, 'Invalid email or password.')
     authorizer

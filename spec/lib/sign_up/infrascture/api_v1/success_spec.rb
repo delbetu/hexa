@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'api_helper'
 require 'persistence_helper'
-require 'sign_up'
+require 'sign_up/infrastructure/rest/api_v1'
 
 
 describe 'post /users' do

@@ -19,7 +19,7 @@ feature 'User identifies against the system' do
   let(:authorizer) {
     instance_double(
       Authorizer,
-      authorize: true,
+      authenticate: true,
       grant_access: true,
       get_token: Token.encode('permissions' => { 'roles' => ['hr'] })
     )
