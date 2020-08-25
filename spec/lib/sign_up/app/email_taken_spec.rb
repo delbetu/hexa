@@ -8,7 +8,7 @@ describe SignUp do
     double('creator', exists?: true)
   }
 
-  subject { SignUp.call(user_attrs, creator: fake_creator) }
+  subject { SignUp.new(creator: fake_creator).call(user_attrs) }
 
   it 'returns failure status' do
     expect(subject.success?).to eq(false)

@@ -15,7 +15,7 @@ post '/users' do
   body = request.body.read.to_s
   user_attributes = params[:user] || JSON.parse(body)['user'] # accept form data or json
 
-  result = SignUp.call(user_attributes, creator: UserCreatorAdapter)
+  result = SignUp.new(creator: UserCreatorAdapter).call(user_attributes)
 
   if result.success?
     UsersSerializer.new(result)

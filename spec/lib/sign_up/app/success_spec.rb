@@ -7,7 +7,7 @@ describe SignUp do
   let(:fake_creator) { double('creator', create: user_attrs.merge(id: 999), exists?: false) }
   let(:fake_sender) { double('email_sender', send_confirmation: user_attrs.merge(id: 999), exists?: false) }
 
-  subject { SignUp.call(user_attrs, creator: fake_creator, email_sender: fake_sender) }
+  subject { SignUp.new(creator: fake_creator, email_sender: fake_sender).call(user_attrs) }
 
   it 'returns success status' do
     expect(subject.email).to eq(user_attrs[:email])

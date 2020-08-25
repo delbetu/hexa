@@ -7,9 +7,16 @@ class EmailSender
 end
 
 class SignUp
+  # Inject collaborators dependencies
+  def initialize(creator: UserCreatorPort, email_sender: EmailSender, roles: ["hr"])
+    @creator = creator
+    @email_sender = email_sender
+    @roles = roles
+  end
+
   Result = Struct.new(:success?, :id, :name, :email, :roles, :errors, keyword_init: true)
 
-  def self.call(user_attributes, creator: UserCreatorPort, email_sender: EmailSender, roles: ["hr"])
+  def call(user_attributes)
     # authorization Anybody can signup
 
     # Gather data & input parsing
@@ -38,4 +45,8 @@ class SignUp
       raise e # Developer needs to track the issue.
     end
   end
+
+  private
+
+  attr_reader :creator, :email_sender, :roles
 end
