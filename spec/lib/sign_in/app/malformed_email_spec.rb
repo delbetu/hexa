@@ -12,7 +12,7 @@ feature 'User cannot identify against the system' do
   end
 
   let(:then_the_app_returns_an_error_message) do
-    expect(@result.error['messages']).to eq ['Malformed email']
+    expect(@result.errors).to eq ['Malformed email']
   end
 
   subject { SignInFlow.new(authorizer: authorizer) }

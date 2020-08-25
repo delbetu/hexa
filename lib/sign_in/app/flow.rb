@@ -7,8 +7,8 @@ class SignInFlow
     @authorizer = authorizer
   end
 
-  SignInResult = Struct.new(:success, :token, :error) do
-    def initialize(success: true, token: '', error: {}); super end
+  SignInResult = Struct.new(:success, :token, :errors) do
+    def initialize(success: true, token: '', errors: []); super end
   end
 
   def sign_in(email:, password:)
@@ -23,7 +23,7 @@ class SignInFlow
   rescue Authorizer::NotAuthorizedError, EndUserError => e
     result = SignInResult.new
     result.success = false
-    result.error = { 'messages' => [ e.message ] }
+    result.errors = [ e.message ]
     result
   end
 
