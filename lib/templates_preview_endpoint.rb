@@ -10,28 +10,26 @@ TEMPLATES_DIR = "lib/erb_templates/".freeze
 get '/template_preview' do
   return 403 if env == 'production'
   template_name = Maybe(params[:name])
-  template = templates[template_name] || index_template
+
+  template = if template_exists?(template_name)
+    { erb: load_erb(template_name), data: load_data(template_name) }
+  else
+    index_template
+  end
 
   ERB.new(template[:erb]).result_with_hash(template[:data])
 end
 
-# for each file under templates directory
-# returns
-# {
-#   filename: {
-#     erb: File.read('lib/erb_templates/filename.html.erb'),
-#     data: YAML.load_file('lib/erb_templates/filename.data.yml')
-#   }
-# }
-def templates
-  template_names.inject({}) do |acum, filename|
-    acum.merge(
-      filename => {
-        erb: File.read("#{TEMPLATES_DIR}/#{filename}.html.erb"),
-        data: YAML.load_file("#{TEMPLATES_DIR}/#{filename}.data.yml")
-      }
-    )
-  end
+def template_exists?(filename)
+  template_names.include?(filename)
+end
+
+def load_erb(filename)
+  File.read("#{TEMPLATES_DIR}/#{filename}.html.erb")
+end
+
+def load_data(filename)
+  YAML.load_file("#{TEMPLATES_DIR}/#{filename}.data.yml")
 end
 
 # Extract the name of the templates without extensions
