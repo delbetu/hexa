@@ -1,0 +1,3 @@
+confirm_success_url: 'https://myapp.com/confirm_email?id=96QW$!29AS'
+confirm_fraud_url: 'https://myapp.com/reject_signup?id=96QW$!29AS'
+name: 'Bruce Wayne'

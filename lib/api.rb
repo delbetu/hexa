@@ -19,21 +19,28 @@ get '/' do
 end
 
 require 'erb'
-email_confirmation_template = <<-TEMPLATE
-  Hello <%= name %>, thanks for signin up.<br/>
-  Please <a href="<%= confirm_success_url %>">confirm</a> your email get full access.<br/>
-  If you didn't sign up <a href="<%= confirm_fraud_url %>">let us know</a> so we can suspend the account.<br/>
-TEMPLATE
+# email_confirmation_template = 
+# email_confirmation_data = 
 
-email_confirmation_data = {
-  confirm_success_url: 'https://myapp.com/confirm_email?id=96QW$!29AS',
-  confirm_fraud_url: 'https://myapp.com/reject_signup?id=96QW$!29AS',
-  name: 'Bruce Wayne'
-}
-
-templates = {
-  email_confirmation: { erb: email_confirmation_template, data: email_confirmation_data}
-}
+# for each file under templates directory
+# returns
+# {
+#   email_confirmation: {
+#     erb: File.read('lib/erb_templates/email_confirmation.html.erb'),
+#     data: YAML.load_file('lib/erb_templates/email_confirmation.data.yml')
+#   }
+# }
+def templates
+  names = Dir['lib/erb_templates/*.html.erb'].map { |f| File.basename(f, ".html.erb") }
+  names.inject({}) do |acum, filename|
+    acum.merge(
+      filename => {
+        erb: File.read("lib/erb_templates/#{filename}.html.erb"),
+        data: YAML.load_file("lib/erb_templates/#{filename}.data.yml")
+      }
+    )
+  end
+end
 
 def index_template
   url_for_names = <<-TEMPLATE
@@ -53,7 +60,7 @@ end
 
 get '/template_preview' do
   return 403 if env == 'production'
-  template_name = Maybe(params[:name]).to_sym
+  template_name = Maybe(params[:name])
   template = templates[template_name] || index_template
 
   ERB.new(template[:erb]).result_with_hash(template[:data])
