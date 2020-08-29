@@ -19,23 +19,44 @@ get '/' do
 end
 
 require 'erb'
+email_confirmation_template = <<-TEMPLATE
+  Hello <%= name %>, thanks for signin up.<br/>
+  Please <a href="<%= confirm_success_url %>">confirm</a> your email get full access.<br/>
+  If you didn't sign up <a href="<%= confirm_fraud_url %>">let us know</a> so we can suspend the account.<br/>
+TEMPLATE
+
+email_confirmation_data = {
+  confirm_success_url: 'https://myapp.com/confirm_email?id=96QW$!29AS',
+  confirm_fraud_url: 'https://myapp.com/reject_signup?id=96QW$!29AS',
+  name: 'Bruce Wayne'
+}
+
+templates = {
+  email_confirmation: { erb: email_confirmation_template, data: email_confirmation_data}
+}
+
+def index_template
+  url_for_names = <<-TEMPLATE
+  <ul>
+    <% names.each do |name| %>
+      <li>
+        <a href="/template_preview?name=<%=name%>"><%= name %></a>
+      </li>
+    <% end %>
+  <ul>
+TEMPLATE
+  {
+    erb: url_for_names,
+    data: { names: [ 'email_confirmation' ] }
+  }
+end
+
 get '/template_preview' do
   return 403 if env == 'production'
-  template_name = params[:name]
+  template_name = Maybe(params[:name]).to_sym
+  template = templates[template_name] || index_template
 
-  email_confirmation_template = <<-TEMPLATE
-    Hello <%= name %>, thanks for signin up.<br/>
-    Please <a href="<%= confirm_success_url %>">confirm</a> your email get full access.<br/>
-    If you didn't sign up <a href="<%= confirm_fraud_url %>">let us know</a> so we can suspend the account.<br/>
-  TEMPLATE
-
-  email_confirmation_data = {
-    confirm_success_url: 'https://myapp.com/confirm_email?id=96QW$!29AS',
-    confirm_fraud_url: 'https://myapp.com/reject_signup?id=96QW$!29AS',
-    name: 'Bruce Wayne'
-  }
-
-  ERB.new(email_confirmation_template).result_with_hash(email_confirmation_data)
+  ERB.new(template[:erb]).result_with_hash(template[:data])
 end
 
 ################################# GRAPHQL #################################
