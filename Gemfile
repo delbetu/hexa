@@ -15,6 +15,7 @@ gem 'sidekiq'
 gem 'sentry-raven'
 gem 'graphql'
 gem 'rack-contrib'
+gem 'mail'
 
 group :test do
   gem 'capybara'
