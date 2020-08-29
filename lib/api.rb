@@ -18,6 +18,26 @@ get '/' do
   "Welcome to Hexa."
 end
 
+require 'erb'
+get '/template_preview' do
+  return 403 if env == 'production'
+  template_name = params[:name]
+
+  email_confirmation_template = <<-TEMPLATE
+    Hello <%= name %>, thanks for signin up.<br/>
+    Please <a href="<%= confirm_success_url %>">confirm</a> your email get full access.<br/>
+    If you didn't sign up <a href="<%= confirm_fraud_url %>">let us know</a> so we can suspend the account.<br/>
+  TEMPLATE
+
+  email_confirmation_data = {
+    confirm_success_url: 'https://myapp.com/confirm_email?id=96QW$!29AS',
+    confirm_fraud_url: 'https://myapp.com/reject_signup?id=96QW$!29AS',
+    name: 'Bruce Wayne'
+  }
+
+  ERB.new(email_confirmation_template).result_with_hash(email_confirmation_data)
+end
+
 ################################# GRAPHQL #################################
 require 'graphql'
 module Types
