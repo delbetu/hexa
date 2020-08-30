@@ -7,6 +7,11 @@ require 'factories'
 ############### Load Support Files ###############
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 
+############### Do not send real emails while testing ###############
+Mail.defaults do
+  delivery_method :test
+end
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
