@@ -36,4 +36,17 @@ describe EmailSenderAdapter do
 
     expect(Templates).to have_received(:load_erb).with('email_confirmation', any_args)
   end
+
+  it 'generates a pending confimration' do
+    allow(PendingConfirmationPort).to receive(:create!).and_return(double(id: 999))
+
+    EmailSenderAdapter.send_signup_confirmation(
+      id: 1,
+      name: 'Bruce Wayne',
+      email: 'bruce@batcave.com',
+      roles: ['hr']
+    )
+
+    expect(PendingConfirmationPort).to have_received(:create!).with(user_id: 1, roles: ['hr'])
+  end
 end
