@@ -1,5 +1,6 @@
 require 'sign_up/app/sign_up'
 require 'sign_up/infrastructure/user_creator_adapter'
+require 'sign_up/infrastructure/email_sender_adapter'
 
 module Mutations
   class SignUp < BaseMutation
@@ -15,7 +16,7 @@ module Mutations
 
     def resolve(name:, email:, password:)
       user_attributes = { name: name, email: email, password: password }
-      result = ::SignUp.new(creator: UserCreatorAdapter).call(user_attributes)
+      result = ::SignUp.new(creator: UserCreatorAdapter, email_sender: EmailSenderAdapter).call(user_attributes)
       if result.success?
         {
           success: true,

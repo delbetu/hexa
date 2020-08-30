@@ -24,7 +24,7 @@ class SignUp
 
     user_created = creator.create(parsed_user.to_h.merge(roles: ['guest']))
 
-    email_sender.send_confirmation(
+    email_sender.send_signup_confirmation(
       **user_created.except(:password).merge(roles: roles)
     )
 
