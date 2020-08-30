@@ -1,19 +1,16 @@
 require 'sign_up/domain/user'
 require 'sign_up/domain/user_creator_port'
-
-class EmailSender
-  def self.send_confirmation(id:, name:, email:, roles:)
-  end
-end
+require 'sign_up/domain/email_sender_port'
 
 class SignUp
   # Inject collaborators dependencies
-  def initialize(creator: UserCreatorPort, email_sender: EmailSender, roles: ["hr"])
+  def initialize(creator: UserCreatorPort, email_sender: EmailSenderPort, roles: ["hr"])
     @creator = creator
     @email_sender = email_sender
     @roles = roles
   end
 
+  # TODO: create ActionResult = (:success?, :id, :errors, ...other_attrs)
   Result = Struct.new(:success?, :id, :name, :email, :roles, :errors, keyword_init: true)
 
   def call(user_attributes)

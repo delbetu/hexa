@@ -1,9 +1,9 @@
-module UserCreator
-  def self.create(user_attributes)
-    user_attributes
+module UserCreatorPort
+  def create(user_attributes)
+    raise 'Not Implemented'
   end
 
-  def self.exists?(email:)
-    false
+  def exists?(email:)
+    raise 'Not Implemented'
   end
 end
