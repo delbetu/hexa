@@ -1,6 +1,7 @@
 require 'sign_up/domain/user'
 require 'sign_up/domain/user_creator_port'
 require 'sign_up/domain/email_sender_port'
+require 'shared/domain/action_result'
 
 class SignUp
   # Inject collaborators dependencies
@@ -9,9 +10,6 @@ class SignUp
     @email_sender = email_sender
     @roles = roles
   end
-
-  # TODO: create ActionResult = (:success?, :id, :errors, ...other_attrs)
-  Result = Struct.new(:success?, :id, :name, :email, :roles, :errors, keyword_init: true)
 
   def call(user_attributes)
     # authorization Anybody can signup
@@ -28,16 +26,16 @@ class SignUp
       **user_created.except(:password).merge(roles: roles)
     )
 
-    Result.new(user_created.except(:password).merge(success?: true))
+    ActionSuccess(user_created.except(:password))
 
     # error_handling
   rescue EndUserError => e
-    Result.new(id: "Sign Up Error", success?: false, errors: [ e.message ])
+    ActionError(id: "Sign Up Error", errors: [ e.message ])
   rescue => e
     if (ENV['RACK_ENV'] == 'production')
       Raven.capture_exception(e)
       # End user doesn't receive a stacktrace
-      Result.new(id: "Sign Up Error", success?: false, errors: [ "Error when signing up #{user_attributes}. Please try again later." ])
+      ActionError(id: "Sign Up Error", errors: [ "Error when signing up #{user_attributes}. Please try again later." ])
     else # test & Development
       raise e # Developer needs to track the issue.
     end
