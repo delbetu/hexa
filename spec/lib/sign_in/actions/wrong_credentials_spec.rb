@@ -15,7 +15,7 @@ feature 'User cannot identify against the system' do
     expect(@result.errors).to eq ['Invalid email or password.']
   end
 
-  subject { SignIn.new(authorizer: authorizer) }
+  subject { SignIn.new(authenticator: authorizer) }
 
   let(:authorizer) {
     authorizer = instance_double(Authorizer, grant_access: true)

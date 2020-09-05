@@ -1,8 +1,9 @@
 require 'shared/authorization/domain/token'
 require 'shared/authorization/domain/password'
+require 'shared/errors'
 
 class Authorizer
-  NotAuthorizedError = Class.new(StandardError)
+  NotAuthorizedError = Class.new(EndUserError)
 
   # TODO: Use string for roles
   USER_ROLE = { 'bruce.wayne@gotham.com' => [:hr] }.freeze

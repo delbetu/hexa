@@ -1,33 +1,25 @@
 require 'sign_in/domain/user_credentials'
 require 'shared/errors'
+require 'shared/domain/action_result'
 
 class SignIn
   # Inject collaborators dependencies
-  def initialize(authorizer: AuthorizerPort)
-    @authorizer = authorizer
-  end
-
-  SignInResult = Struct.new(:success, :token, :errors) do
-    def initialize(success: true, token: '', errors: []); super end
+  def initialize(authenticator: OpenStruct.new(authenticate: false, get_token: ''))
+    @authenticator = authenticator
   end
 
   def sign_in(email:, password:)
-    # Validate Input by Parsing
-    user = UserCredentials(email: email, password: password)
+    with_error_handling "Sign up Error" do
+      # Validate Input by Parsing
+      user = UserCredentials(email: email, password: password)
 
-    authorizer.authenticate(email: email, password: password)
+      authenticator.authenticate(email: email, password: password)
 
-    result = SignInResult.new
-    result.token = authorizer.get_token
-    result
-  rescue Authorizer::NotAuthorizedError, EndUserError => e
-    result = SignInResult.new
-    result.success = false
-    result.errors = [ e.message ]
-    result
+      ActionSuccess(token: authenticator.get_token)
+    end
   end
 
   private
 
-  attr_reader :authorizer
+  attr_reader :authenticator
 end

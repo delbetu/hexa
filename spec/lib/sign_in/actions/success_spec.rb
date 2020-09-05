@@ -25,7 +25,7 @@ feature 'User identifies against the system' do
     )
   }
 
-  subject { SignIn.new(authorizer: authorizer) }
+  subject { SignIn.new(authenticator: authorizer) }
 
   scenario 'user provides the right credentials' do
     given_a_user_with_some_permission

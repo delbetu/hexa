@@ -10,11 +10,11 @@ get '/sign_in' do
 
   # Perform Work
   authorizer = Authorizer.new(authorization_data: AuthDataProviderAdapter)
-  flow = SignIn.new(authorizer: authorizer)
-  result = flow.sign_in(email: params[:email], password: params[:password])
+  use_case = SignIn.new(authenticator: authorizer)
+  result = use_case.sign_in(email: params[:email], password: params[:password])
 
   # Deliver result
-  if result.success
+  if result.success?
     { token: result.token }
   else # Handle errors
     { error: result.error }
