@@ -36,3 +36,7 @@ end
 def Maybe(value)
   value.nil? ? NullObject.new : value
 end
+
+def assert(condition, message = "Assertion failed")
+  raise EndUserError, message, caller unless condition
+end

@@ -18,7 +18,7 @@ class SignUp
     parsed_user = User(user_attributes)
 
     # Perform Job chain ( in transaction mode )
-    raise EndUserError, 'Email already taken' if creator.exists?(email: parsed_user.email)
+    assert(!creator.exists?(email: parsed_user.email), 'Email already taken')
 
     user_created = creator.create(parsed_user.to_h.merge(roles: ['guest']))
 
