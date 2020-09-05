@@ -1,11 +1,12 @@
+- [ ] Add gql for sign in
+- [ ] gql endpoint for schema???
 - [x] Sign Up improve error when email is already taken
 - [x] Improve Crud
 - [ ] Crear un Reporter que encapsule Raven ( Sentry ) y el logger de heroku??, que sea visible de todos lados??
-- [x] Borrar los port ???
-- [x] Borrar las interfaces ???
-- [ ] Implementar los parsing de dominio con json schema???
+- [x] Borrar los port
+- [x] Borrar las interfaces
 - [ ] Los json fixtures que se generan por los tests, no sobrescribir los ids
-- [ ] Testear e implementar el Mailer
+- [X] Testear e implementar el Mailer
 - [ ] Seguir las reglas para evitar bugs de avdi grimm
   - [ ] Obligar a que se cumpla un contrato en diferentes etapas del procesamiento de datos.
         Si el contrato se cumple enotnces no existe el code smell switch-statement
