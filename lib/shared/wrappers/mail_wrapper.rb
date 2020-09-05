@@ -8,12 +8,11 @@ class MailWrapper
   end
 
   def deliver!
-    mail = Mail.new
-    mail.from = @from
-    mail.to = @to
-    mail.subject = @subject
-    mail.body = @body
-    mail.header['Content-Type'] = 'text/html; charset=UTF-8'
-    mail.deliver!
+    Pony.mail(
+      from: @from,
+      to: @to,
+      subject: @subject,
+      html_body: @body,
+    )
   end
 end

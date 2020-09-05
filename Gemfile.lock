@@ -44,6 +44,8 @@ GEM
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
     pg (1.2.3)
+    pony (1.13.1)
+      mail (>= 2.0)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -106,8 +108,8 @@ DEPENDENCIES
   fast_jsonapi
   graphql
   jwt
-  mail
   pg
+  pony
   pry
   rack-contrib
   rake
