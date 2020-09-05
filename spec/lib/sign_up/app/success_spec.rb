@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-require 'sign_up/app/sign_up'
+require 'sign_up/actions/sign_up'
 
 describe SignUp do
   let(:user_attrs) { build_user.build }

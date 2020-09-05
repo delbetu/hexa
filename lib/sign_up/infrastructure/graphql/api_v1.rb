@@ -1,4 +1,4 @@
-require 'sign_up/app/sign_up'
+require 'sign_up/actions/sign_up'
 require 'sign_up/infrastructure/user_creator_adapter'
 require 'sign_up/infrastructure/email_sender_adapter'
 

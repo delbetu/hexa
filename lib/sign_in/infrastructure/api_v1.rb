@@ -1,7 +1,7 @@
 require 'sinatra'
 require "shared/authorization/infrastructure/auth_data_provider_adapter"
 require "shared/authorization/authorizer"
-require "sign_in/app/flow"
+require "sign_in/actions/flow"
 
 get '/sign_in' do
   # Gather Input ( params, db or external resource)
