@@ -1,4 +1,20 @@
-env = ENV['RACK_ENV'] || 'development'
+def env
+  ENV['RACK_ENV'] || 'development'
+end
+
+# TODO: implement this
+# def env
+#   case(ENV['RACK_ENV'])
+#   when 'production'
+#     OpenStruct.new(production?: true, development?: false, test?: false, docker?: false)
+#   when 'test'
+#     OpenStruct.new(production?: false, development?: false, test?: true, docker?: false)
+#   when 'docker'
+#     OpenStruct.new(production?: false, development?: false, test?: true, docker?: true)
+#   else # treat as 'development'
+#     OpenStruct.new(production?: false, development?: true, test?: false, docker?: false)
+#   end
+# end
 
 if env != 'production'
   require 'dotenv'

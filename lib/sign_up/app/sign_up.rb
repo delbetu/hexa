@@ -12,32 +12,22 @@ class SignUp
   end
 
   def call(user_attributes)
-    # authorization Anybody can signup
+    with_error_handling "Sign Up Error" do
+      # authorization Anybody can signup
 
-    # Gather data & input parsing
-    parsed_user = User(user_attributes)
+      # Gather data & input parsing
+      parsed_user = User(user_attributes)
 
-    # Perform Job chain ( in transaction mode )
-    assert(!creator.exists?(email: parsed_user.email), 'Email already taken')
+      # Perform Job chain ( in transaction mode )
+      assert(!creator.exists?(email: parsed_user.email), 'Email already taken')
 
-    user_created = creator.create(parsed_user.to_h.merge(roles: ['guest']))
+      user_created = creator.create(parsed_user.to_h.merge(roles: ['guest']))
 
-    email_sender.send_signup_confirmation(
-      **user_created.except(:password).merge(roles: roles)
-    )
+      email_sender.send_signup_confirmation(
+        **user_created.except(:password).merge(roles: roles)
+      )
 
-    ActionSuccess(user_created.except(:password))
-
-    # error_handling
-  rescue EndUserError => e
-    ActionError(id: "Sign Up Error", errors: [ e.message ])
-  rescue => e
-    if (ENV['RACK_ENV'] == 'production')
-      Raven.capture_exception(e)
-      # End user doesn't receive a stacktrace
-      ActionError(id: "Sign Up Error", errors: [ "Error when signing up #{user_attributes}. Please try again later." ])
-    else # test & Development
-      raise e # Developer needs to track the issue.
+      ActionSuccess(user_created.except(:password))
     end
   end
 
