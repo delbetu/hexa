@@ -1,7 +1,7 @@
 require 'sign_in/domain/user_credentials'
 require 'shared/errors'
 
-class SignInFlow
+class SignIn
   # Inject collaborators dependencies
   def initialize(authorizer: AuthorizerPort)
     @authorizer = authorizer

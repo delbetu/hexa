@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'capybara/rspec'
 require 'shared/authorization/authorizer'
-require 'sign_in/actions/flow'
+require 'sign_in/actions/sign_in'
 
 feature 'User identifies against the system' do
   let(:given_a_user_with_some_permission) do
@@ -25,7 +25,7 @@ feature 'User identifies against the system' do
     )
   }
 
-  subject { SignInFlow.new(authorizer: authorizer) }
+  subject { SignIn.new(authorizer: authorizer) }
 
   scenario 'user provides the right credentials' do
     given_a_user_with_some_permission

@@ -1,6 +1,6 @@
 require 'capybara/rspec'
 require 'shared/authorization/authorizer'
-require 'sign_in/actions/flow'
+require 'sign_in/actions/sign_in'
 
 feature 'User cannot identify against the system' do
   let(:with_some_permission) do
@@ -15,7 +15,7 @@ feature 'User cannot identify against the system' do
     expect(@result.errors).to eq ['Malformed email']
   end
 
-  subject { SignInFlow.new(authorizer: authorizer) }
+  subject { SignIn.new(authorizer: authorizer) }
 
   let(:authorizer) {
     authorizer = instance_double(Authorizer, grant_access: true)
