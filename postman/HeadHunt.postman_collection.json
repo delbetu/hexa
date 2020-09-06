@@ -21,7 +21,27 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"user\": {\n\t\t\"email\": \"some@email.com\",\n\t\t\"password\": \"Pass!@#$\",\n\t\t\"name\": \"John Smith\",\n\t\t\"roles\": [\"hr\"]\n\t}\n}"
+					"raw": "{\n\t\"user\": {\n\t\t\"email\": \"john@email.com\",\n\t\t\"password\": \"pass123!\",\n\t\t\"name\": \"John Smith\",\n\t\t\"roles\": [\"hr\"]\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Sign In",
+			"request": {
+				"url": "{{BASE_URL}}/sign_in",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"adam@email.com\",\n\t\"password\": \"Pass123!\"\n}"
 				},
 				"description": ""
 			},
@@ -48,7 +68,7 @@
 			"response": []
 		},
 		{
-			"name": "[GQL] SignUp Users",
+			"name": "[GQL]SignUp Users",
 			"request": {
 				"url": "{{BASE_URL}}/graphql",
 				"method": "POST",
@@ -61,7 +81,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"query\": \"{ users { email name } }\"\n}"
+					"raw": "{\n\t\"query\": \"mutation SignUp($name: String!, $email: String!, $password: String!) { signUp(name: $name, email: $email,password: $password) { success errors } }\",\n\t\"variables\": {\n\t\t\"name\": \"Adam Smith\",\n\t\t\"email\": \"adam@email.com\",\n\t\t\"password\": \"Pass123!\"\n\t}\n}"
 				},
 				"description": ""
 			},
