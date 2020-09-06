@@ -32,3 +32,5 @@
         Put the error handling at the end ==> Usar un bouncer method ==> do nothing or raise error
         es como un after hook, despues de que el codigo que nosotros queremos ejecuta, el resultado
         es tomado por nuestro bouncer_method y si retorno un valor invalido hacemos un raise ArgumentError
+- [ ] test sign_up user creator adapter
+- [ ] test sign_up email confirmator adapter
