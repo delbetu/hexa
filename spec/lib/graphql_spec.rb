@@ -20,27 +20,4 @@ describe 'graphql reading users' do
     expect(content.dig('data', 'users', 0, 'name')).to eq('Batman')
     expect(content.dig('data', 'users', 1, 'name')).to eq('Joker')
   end
-
-  it 'creates user' do
-    gql_action_call = %{
-      mutation SignUp($name: String!, $email: String!, $password: String!) {
-        signUp(name: $name, email: $email, password: $password) {
-          success
-          errors
-        }
-      }
-    }
-
-    vars = {
-      "name": "Adam Smith",
-      "email": "adam@email.com",
-      "password": "Pass123!",
-    }
-
-    post '/graphql', { query: gql_action_call, variables: vars}.to_json
-
-    expect(last_response).to be_ok
-    content = JSON.parse(last_response.body)
-    expect(content.dig('data', 'signUp', 'success')).to be true
-  end
 end
