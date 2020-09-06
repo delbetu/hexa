@@ -19,6 +19,13 @@ services:
     volumes:
       - redis_volume:/data
 
+  mailcatcher:
+    image: yappabe/mailcatcher
+    container_name: "mailcatcher"
+    ports:
+      - 1025:1025
+      - 1080:1080
+
   # sidekiq:
   #   container_name: "hexa_sidekiq"
   #   depends_on:
@@ -49,6 +56,8 @@ services:
       - .:/hexa_app:rw
     user: 1000:1000
     command: bundle exec shotgun -I lib -I app -p 3000 -o 0.0.0.0
+    links:
+      - mailcatcher
 
   # webpack_dev:
   #   container_name: "hexa_webpack"

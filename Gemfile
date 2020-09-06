@@ -17,14 +17,15 @@ gem 'graphql'
 gem 'rack-contrib'
 gem 'pony'
 
-group :test do
-  gem 'capybara'
-  gem 'rspec'
-end
-
 group :test, :development do
   gem 'dotenv'
   gem 'byebug'
   gem 'sqlite3'
   gem 'shotgun'
+  gem 'mailcatcher'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'rspec'
 end
