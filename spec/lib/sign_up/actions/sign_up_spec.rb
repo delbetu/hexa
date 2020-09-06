@@ -16,7 +16,15 @@ describe SignUp do
 
   it 'asks creator to create a user with role guest' do
     subject
-    expect(fake_creator).to have_received(:create).with(user_attrs.merge(roles: ['guest']))
+    expect(fake_creator).to have_received(:create).with(
+      hash_including(user_attrs.except(:password).merge(roles: ['guest']))
+    )
+  end
+
+  it 'encrypts the password before saving' do
+    allow(Password).to receive(:encrypt)
+    subject
+    expect(Password).to have_received(:encrypt).with(user_attrs[:password])
   end
 
   it 'returns the id of the user being created' do

@@ -2,6 +2,7 @@ require 'sign_up/domain/user'
 require 'sign_up/domain/user_creator_port'
 require 'sign_up/domain/email_sender_port'
 require 'shared/domain/action_result'
+require 'shared/authorization/domain/password'
 
 class SignUp
   # Inject collaborators dependencies
@@ -17,6 +18,7 @@ class SignUp
 
       # Gather data & input parsing
       parsed_user = User(user_attributes)
+      parsed_user.password = Password.encrypt(parsed_user.password)
 
       # Perform Job chain ( in transaction mode )
       assert(!creator.exists?(email: parsed_user.email), 'Email already taken')

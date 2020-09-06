@@ -17,6 +17,6 @@ get '/sign_in' do
   if result.success?
     { token: result.token }
   else # Handle errors
-    { error: result.error }
+    { errors: result.errors }
   end.to_json
 end

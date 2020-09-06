@@ -12,7 +12,7 @@ describe Authorizer do
       it 'raise not-authorized' do
         expect {
           subject.authenticate(email: 'bruce.wayne@gotham.com', password: 'dontcare')
-        }.to raise_error(Authorizer::NotAuthorizedError)
+        }.to raise_error(EndUserError, /Email or password do not match/)
       end
     end
 

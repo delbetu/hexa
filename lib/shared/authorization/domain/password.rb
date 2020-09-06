@@ -1,5 +1,6 @@
 require 'bcrypt'
 
+# TODO: move to wrappers folder
 # Wrapper around BCrypt
 class Password
   def self.encrypt(pwd)

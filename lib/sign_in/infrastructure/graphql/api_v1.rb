@@ -39,4 +39,3 @@ class UserSignIn < GraphQL::Schema::Object
 
   field :sign_in, mutation: Mutations::SignIn
 end
-

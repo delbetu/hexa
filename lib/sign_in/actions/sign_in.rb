@@ -13,7 +13,7 @@ class SignIn
       # Validate Input by Parsing
       user = UserCredentials(email: email, password: password)
 
-      authenticator.authenticate(email: email, password: password)
+      authenticator.authenticate(email: user.email, password: user.password)
 
       ActionSuccess(token: authenticator.get_token)
     end

@@ -23,11 +23,11 @@ class Authorizer
   # Remembers authenticated user
   def authenticate(email:, password:)
     user = authorization_data.read(filters: [email: email]).first
-    raise Authorizer::NotAuthorizedError unless user
+    assert(!user.nil?, "Email or password do not match.")
 
     password_matches = (Password.decrypt(user[:password]) == password)
+    assert(password_matches, "Email or password do not match.")
 
-    raise Authorizer::NotAuthorizedError unless password_matches
     @authenticated_user = user
   end
 

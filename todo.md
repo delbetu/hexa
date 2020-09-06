@@ -1,12 +1,10 @@
+- [ ] Sign up no esta guardando un hash en el password ( esta guardando el password en plano )
+- [ ] Postman el gql de signup user esta mal
+- [ ] Add postman for rest sign in
 - [ ] Add gql for sign in
 - [ ] gql endpoint for schema???
-- [x] Sign Up improve error when email is already taken
-- [x] Improve Crud
 - [ ] Crear un Reporter que encapsule Raven ( Sentry ) y el logger de heroku??, que sea visible de todos lados??
-- [x] Borrar los port
-- [x] Borrar las interfaces
 - [ ] Los json fixtures que se generan por los tests, no sobrescribir los ids
-- [X] Testear e implementar el Mailer
 - [ ] Seguir las reglas para evitar bugs de avdi grimm
   - [ ] Obligar a que se cumpla un contrato en diferentes etapas del procesamiento de datos.
         Si el contrato se cumple enotnces no existe el code smell switch-statement
@@ -34,3 +32,8 @@
         es tomado por nuestro bouncer_method y si retorno un valor invalido hacemos un raise ArgumentError
 - [ ] test sign_up user creator adapter
 - [ ] test sign_up email confirmator adapter
+- [X] Testear e implementar el Mailer
+- [x] Borrar los port
+- [x] Borrar las interfaces
+- [x] Sign Up improve error when email is already taken
+- [x] Improve Crud
