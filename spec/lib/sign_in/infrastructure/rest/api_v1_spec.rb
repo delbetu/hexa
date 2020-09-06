@@ -11,7 +11,7 @@ describe "GET /sign_in" do
       ).build
     )
 
-    get '/sign_in', email: 'bruce.wayne@gotham.com', password: 'batcave'
+    post '/sign_in', { email: 'bruce.wayne@gotham.com', password: 'batcave' }.to_json
 
     expect(last_response).to be_ok
     expect(JSON.parse(last_response.body).dig('token')).to eq(Token.encode({'permissions' => ['sign_in', 'sign_up']}))

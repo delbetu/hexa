@@ -3,15 +3,16 @@ require "shared/authorization/infrastructure/auth_data_provider_adapter"
 require "shared/authorization/authorizer"
 require "sign_in/actions/sign_in"
 
-get '/sign_in' do
+post '/sign_in' do
   # Gather Input ( params, db or external resource)
-  email = params[:email]
-  password = params[:password]
+  data = JSON.parse(request.body.read)
+  email = params[:email] || data['email']
+  password = params[:password] || data['password']
 
   # Perform Work
   authorizer = Authorizer.new(authorization_data: AuthDataProviderAdapter)
   use_case = SignIn.new(authenticator: authorizer)
-  result = use_case.sign_in(email: params[:email], password: params[:password])
+  result = use_case.sign_in(email: email, password: password)
 
   # Deliver result
   if result.success?

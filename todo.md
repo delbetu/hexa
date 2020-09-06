@@ -1,5 +1,3 @@
-- [ ] Sign up no esta guardando un hash en el password ( esta guardando el password en plano )
-- [ ] Postman el gql de signup user esta mal
 - [ ] Add postman for rest sign in
 - [ ] Add gql for sign in
 - [ ] gql endpoint for schema???
@@ -37,3 +35,5 @@
 - [x] Borrar las interfaces
 - [x] Sign Up improve error when email is already taken
 - [x] Improve Crud
+- [X] Sign up no esta guardando un hash en el password ( esta guardando el password en plano )
+- [x] Postman el gql de signup user esta mal
