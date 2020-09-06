@@ -1,5 +1,5 @@
 require 'sinatra'
-require_relative 'sign_in/infrastructure/api_v1'
+require_relative 'sign_in/infrastructure/rest/api_v1'
 require_relative 'sign_up/infrastructure/rest/api_v1'
 require_relative 'templates_preview_endpoint'
 

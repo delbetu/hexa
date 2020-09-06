@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'api_helper'
 require 'persistence_helper'
-require 'sign_in/infrastructure/api_v1'
+require 'sign_in/infrastructure/rest/api_v1'
 
 describe "GET /sign_in" do
   it 'returns a token which encodes permissions for logged in user' do
