@@ -51,9 +51,15 @@ class UsersQuery < GraphQL::Schema::Object
 end
 
 require 'sign_up/infrastructure/graphql/api_v1'
+require 'sign_in/infrastructure/graphql/api_v1'
+class Types::MutationType < GraphQL::Schema::Object
+  field :sign_in, mutation: Mutations::SignIn
+  field :sign_up, mutation: Mutations::SignUp
+end
+
 class GraphqlEndpoint < GraphQL::Schema
   query UsersQuery
-  mutation UserSignUp
+  mutation Types::MutationType
 end
 
 require 'rack/contrib'

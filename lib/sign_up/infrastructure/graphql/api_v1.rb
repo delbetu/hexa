@@ -31,9 +31,3 @@ module Mutations
     end
   end
 end
-class UserSignUp < GraphQL::Schema::Object
-  description "Signup user"
-
-  field :sign_up, mutation: Mutations::SignUp
-end
-
