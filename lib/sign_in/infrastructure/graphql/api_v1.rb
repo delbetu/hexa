@@ -21,7 +21,7 @@ module Mutations
 
       authorizer = Authorizer.new(authorization_data: AuthDataProviderAdapter)
       use_case = ::SignIn.new(authenticator: authorizer)
-      result = use_case.sign_in(credentials)
+      result = use_case.sign_in(**credentials)
 
       if result.success?
         {
