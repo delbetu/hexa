@@ -29,8 +29,10 @@ class InvitatorAdapter
   end
 
   def self.confirm(invitation_id:)
+    DB[:invitations].where(uuid: invitation_id).update(status: 'confirmed')
   end
 
   def self.reject(invitation_id:)
+    DB[:invitations].where(uuid: invitation_id).delete
   end
 end
