@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'erb'
+
+begin
+  migration_name, table, *columns = ARGV
+  verb = migration_name.split("_").first
+  timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+  destination_file = "db/migrate/#{timestamp}_#{migration_name}.rb"
+
+  columns = columns.map { |col| col.split(":") }
+
+  file_content = ERB.new(%(
+Sequel.migration do
+  change do
+    create_table(:<%=table%>) do
+      primary_key :id
+<% columns.each do |type, name| %>
+      <%=type%> :<%=name%>, null: false
+<% end %>
+    end
+  end
+end
+)
+  ).result_with_hash(
+    table: table,
+    columns: columns
+  )
+
+  File.write(destination_file, file_content)
+  puts "Created: #{destination_file}"
+rescue
+  puts "ERROR: Supported syntax is:"
+  puts "generate/migration <filename> <tablename> <colname>:<coltype> <colname>:<coltype>"
+end
+
+# TODO: support this:
+# generate/migration add_location_to_artists artists location:string
+# Sequel.migration do
+#   up do
+#     add_column :artists, :location, String
+#     from(:artists).update(location: 'Sacramento')
+#   end
+#
+#   down do
+#     drop_column :artists, :location
+#   end
+# end
+#
+#
+#
+# generate/migration create_artists artists name:string
+# change do
+#   create_table(:artists) do
+#     primary_key :id
+#     String :name, null: false
+#   end
+# end
