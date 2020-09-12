@@ -30,12 +30,12 @@ class SignUp
       # TODO: intially created without roles is ok. remove 'guest'
       user_created = creator.create(parsed_user.to_h.merge(roles: ['guest']))
 
-      invitator.invite(email: parsed_user.email, roles: roles)
+      invitation_id = invitator.invite(email: parsed_user.email, roles: roles)
 
-      # TODO: should I move this inside invitator? should only execute after invite success
-      # and will have to access the generated ids from invitator
       email_sender.send_signup_confirmation(
-        **user_created.except(:password).merge(roles: roles)
+        invitation_id: invitation_id,
+        name: user_created[:name],
+        email: user_created[:email]
       )
 
       ActionSuccess(user_created.except(:password))

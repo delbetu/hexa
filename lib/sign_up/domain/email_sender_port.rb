@@ -1,5 +1,5 @@
 module EmailSenderPort
-  def send_signup_confirmation(id:, name:, email:, roles:)
+  def send_signup_confirmation(invitation_id:, name:, email:)
     raise 'Not Implemented'
   end
 end

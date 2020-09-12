@@ -3,8 +3,9 @@ require 'spec_helper'
 require 'sign_up/actions/sign_up'
 
 describe SignUp do
+  let(:uuid) { '227c87fc-99b1-4c22-8d39-2a41d6251e4b' }
   let(:user_attrs) { build_user.build }
-  let(:fake_invitator) { double('invitator', invite: nil) }
+  let(:fake_invitator) { double('invitator', invite: uuid) }
   let(:fake_creator) { double('creator', create: user_attrs.merge(id: 999), exists?: false) }
   let(:fake_sender) { double('email_sender', send_signup_confirmation: user_attrs.merge(id: 999), exists?: false) }
 
@@ -46,7 +47,7 @@ describe SignUp do
   it 'sends an email asking for confirmation' do
     subject
     expect(fake_sender).to have_received(:send_signup_confirmation).with(
-      id: 999, name: user_attrs[:name], email: user_attrs[:email], roles: ['candidate']
+      invitation_id: uuid, name: user_attrs[:name], email: user_attrs[:email]
     )
   end
 
