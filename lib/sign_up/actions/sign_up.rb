@@ -1,7 +1,4 @@
 require 'sign_up/domain/user'
-require 'sign_up/domain/user_creator_port'
-require 'sign_up/domain/invitator_port'
-require 'sign_up/domain/email_sender_port'
 require 'shared/domain/action_result'
 require 'shared/authorization/domain/password'
 
@@ -9,7 +6,7 @@ require 'shared/authorization/domain/password'
 # Example: Candidates can sign_up themselves. HRs need invitation from hr team owner.
 class SignUp
   # Inject collaborators dependencies
-  def initialize(invitator: InvitatorPort, creator: UserCreatorPort, email_sender: EmailSenderPort, roles: ["candidate"])
+  def initialize(invitator:, creator:, email_sender:, roles: ["candidate"])
     @creator = creator
     @invitator = invitator
     @email_sender = email_sender

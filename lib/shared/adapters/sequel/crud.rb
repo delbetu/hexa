@@ -1,10 +1,8 @@
-require 'shared/ports/crud'
 require 'shared/errors'
 
 module Adapters
   module Sequel
     module Crud
-      extend ::Ports::Crud
 
       def with(table:, json_columns: [])
         @table = table.freeze

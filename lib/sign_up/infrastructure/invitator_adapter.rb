@@ -1,7 +1,6 @@
 require 'securerandom'
 
 # require 'shared/adapters/invitations_adapter'
-require 'sign_up/domain/invitator_port'
 
 
 
@@ -16,7 +15,6 @@ end
 
 # TODO: pending to implement
 class InvitatorAdapter
-  extend ::InvitatorPort
 
   # stores a pending invitation
   # returns generated invitation id

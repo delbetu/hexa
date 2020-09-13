@@ -1,9 +1,7 @@
-require 'sign_up/domain/email_sender_port'
 require 'shared/wrappers/mail_wrapper'
 require 'shared/templates'
 
 class EmailSenderAdapter
-  extend ::EmailSenderPort
 
   def self.send_signup_confirmation(invitation_id:, name:, email:)
     body = Templates.load_erb('email_confirmation', {
