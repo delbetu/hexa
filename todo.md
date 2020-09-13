@@ -1,9 +1,9 @@
 - [ ] usar graphiql???
 - [ ] gql endpoint for schema???
 - [ ] Crear un Reporter que encapsule Raven ( Sentry ) y el logger de heroku??, que sea visible de todos lados??
-- [ ] Los json fixtures que se generan por los tests, no sobrescribir los ids
 - [ ] test sign_up user creator adapter
 - [ ] test sign_up email confirmator adapter
+- [ ] deploy a servidor gratis diferente de heroku https://dev.to/vuelancer/free-deployment-providers-bk0
 - [x] Testear e implementar el Mailer
 - [x] Borrar los port
 - [x] Borrar las interfaces

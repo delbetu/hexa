@@ -1,19 +1,7 @@
 require 'securerandom'
+require 'shared/adapters/invitations_adapter'
+require 'shared/adapters/users_adapter'
 
-# require 'shared/adapters/invitations_adapter'
-
-
-
-
-require 'shared/adapters/sequel/crud'
-module Adapters
-  module Invitations
-    extend Adapters::Sequel::Crud
-    with(table: :invitations, json_columns: [:roles])
-  end
-end
-
-# TODO: pending to implement
 class InvitatorAdapter
 
   # stores a pending invitation
@@ -26,8 +14,28 @@ class InvitatorAdapter
     invitation[:uuid]
   end
 
+  def self.invitation_for(email:)
+
+  end
+
   def self.confirm(invitation_id:)
-    DB[:invitations].where(uuid: invitation_id).update(status: 'confirmed')
+    DB.transaction do
+      invitations = Adapters::Invitations.read(filters: [uuid: invitation_id])
+      invitation = invitations.first
+      raise "No invitation found" unless invitation
+      invitation[:status] = 'confirmed'
+      Adapters::Invitations.update(invitation)
+
+      grant_roles_to_user(email: invitation[:email], roles: invitation[:roles])
+    end
+  end
+
+  # TODO: move to injected collaborator
+  def self.grant_roles_to_user(email:, roles:)
+    user = Adapters::Users.read(filters: [ { email: email } ]).first
+    raise "No user found" unless user
+    user[:roles] = user[:roles] + roles
+    Adapters::Users.update(user)
   end
 
   def self.reject(invitation_id:)

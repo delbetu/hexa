@@ -1,7 +1,6 @@
 require 'shared/adapters/users_adapter'
 
 class UserCreatorAdapter
-
   def self.create(attributes)
     Adapters::Users.create(attributes)
   end

@@ -1,5 +1,7 @@
 require 'persistence_helper'
 require 'sign_up/infrastructure/invitator_adapter'
+require 'shared/adapters/users_adapter'
+require 'shared/adapters/invitations_adapter'
 
 # TODO: Implement failure cases
 describe InvitatorAdapter do
@@ -11,10 +13,10 @@ describe InvitatorAdapter do
 
       expect(result).to eq('227c87fc-99b1-4c22-8d39-2a41d6251e4b')
 
-      expect(DB[:invitations].all.first).to match(
+      expect(Adapters::Invitations.read.first).to match(
         hash_including(
           email: 'bruce@batcave.com',
-          roles: "[\"candidate\"]",
+          roles: ["candidate"],
           status: 'pending',
           uuid: '227c87fc-99b1-4c22-8d39-2a41d6251e4b'
         )
@@ -24,16 +26,33 @@ describe InvitatorAdapter do
 
   describe '#confirm' do
     let!(:existing_uuid) do
-      # Given an existing invitation
-      InvitatorAdapter.invite(email: 'bruce@batcave.com', roles: ['candidate'])
+      # Given an existing user with role guest and pending invitation
+      user = build_user.with(roles: ['guest']).build
+      Adapters::Users.create(user)
+      InvitatorAdapter.invite(email: user[:email], roles: ['candidate'])
     end
+
+    xit 'error when user not exists'
+    xit 'error when invitation not exists'
 
     it 'confirms the given invitation' do
       InvitatorAdapter.confirm(invitation_id: existing_uuid)
 
-      expect(DB[:invitations].where(uuid: existing_uuid).first).to match(
+      expect(
+        Adapters::Invitations.read(filters: [{ uuid: existing_uuid }]).first
+      ).to match(
         hash_including(
-          status: 'confirmed',
+          status: 'confirmed'
+        )
+      )
+    end
+
+    it 'tells user updater to grant requested role to the user' do
+      InvitatorAdapter.confirm(invitation_id: existing_uuid)
+
+      expect(Adapters::Users.read.last).to match(
+        hash_including(
+          roles: ['guest', 'candidate'],
         )
       )
     end
@@ -48,7 +67,7 @@ describe InvitatorAdapter do
     it 'removes the given invitation' do
       InvitatorAdapter.reject(invitation_id: existing_uuid)
 
-      expect(DB[:invitations].where(uuid: existing_uuid).all).to be_empty
+      expect(Adapters::Invitations.read).to be_empty
     end
   end
 end
