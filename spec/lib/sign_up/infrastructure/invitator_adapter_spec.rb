@@ -9,7 +9,7 @@ describe InvitatorAdapter do
     it 'stores a pending invitations' do
       allow(SecureRandom).to receive(:uuid).and_return('227c87fc-99b1-4c22-8d39-2a41d6251e4b')
 
-      result = InvitatorAdapter.invite(email: 'bruce@batcave.com', roles: ['candidate'])
+      result = subject.invite(email: 'bruce@batcave.com', roles: ['candidate'])
 
       expect(result).to eq('227c87fc-99b1-4c22-8d39-2a41d6251e4b')
 
@@ -25,18 +25,20 @@ describe InvitatorAdapter do
   end
 
   describe '#confirm' do
+    let(:fake_authorizer) { double('authorizer', grant_roles_to_user: nil) }
+    subject { InvitatorAdapter.new(authorizer: fake_authorizer) }
+
     let!(:existing_uuid) do
       # Given an existing user with role guest and pending invitation
-      user = build_user.with(roles: ['guest']).build
-      Adapters::Users.create(user)
-      InvitatorAdapter.invite(email: user[:email], roles: ['candidate'])
+      user = build_user.with(email: 'bruce@gotham.com').with(roles: ['guest']).build
+      subject.invite(email: user[:email], roles: ['candidate'])
     end
 
     xit 'error when user not exists'
     xit 'error when invitation not exists'
 
     it 'confirms the given invitation' do
-      InvitatorAdapter.confirm(invitation_id: existing_uuid)
+      subject.confirm(invitation_id: existing_uuid)
 
       expect(
         Adapters::Invitations.read(filters: [{ uuid: existing_uuid }]).first
@@ -48,24 +50,22 @@ describe InvitatorAdapter do
     end
 
     it 'tells user updater to grant requested role to the user' do
-      InvitatorAdapter.confirm(invitation_id: existing_uuid)
+      subject.confirm(invitation_id: existing_uuid)
 
-      expect(Adapters::Users.read.last).to match(
-        hash_including(
-          roles: ['guest', 'candidate'],
-        )
-      )
+      expect(fake_authorizer).to have_received(:grant_roles_to_user)
+        .with(email: 'bruce@gotham.com', roles: ['candidate'])
+
     end
   end
 
   describe '#reject' do
     let!(:existing_uuid) do
       # Given an existing invitation
-      InvitatorAdapter.invite(email: 'bruce@batcave.com', roles: ['candidate'])
+      subject.invite(email: 'bruce@batcave.com', roles: ['candidate'])
     end
 
     it 'removes the given invitation' do
-      InvitatorAdapter.reject(invitation_id: existing_uuid)
+      subject.reject(invitation_id: existing_uuid)
 
       expect(Adapters::Invitations.read).to be_empty
     end

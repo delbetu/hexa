@@ -18,7 +18,7 @@ module Mutations
     def resolve(name:, email:, password:)
       user_attributes = { name: name, email: email, password: password }
       result = ::SignUp
-        .new(invitator: InvitatorAdapter, creator: UserCreatorAdapter, email_sender: EmailSenderAdapter)
+        .new(invitator: InvitatorAdapter.new, creator: UserCreatorAdapter, email_sender: EmailSenderAdapter)
         .call(user_attributes)
       if result.success?
         {

@@ -18,7 +18,7 @@ post '/users' do
   user_attributes = params[:user] || JSON.parse(body)['user'] # accept form data or json
 
   result = SignUp
-    .new(invitator: InvitatorAdapter, creator: UserCreatorAdapter, email_sender: EmailSenderAdapter)
+    .new(invitator: InvitatorAdapter.new, creator: UserCreatorAdapter, email_sender: EmailSenderAdapter)
     .call(user_attributes)
 
   if result.success?
