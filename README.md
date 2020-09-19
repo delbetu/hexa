@@ -69,7 +69,11 @@ Check .env.template
 ### Running Migrations
 
 ```shell
-$> ./bin/db/migrate
+$>  docker exec -it hexa_rack bash -l
+docker_host:/hexa_app$ bin/db/migrate
+START Running Migrations ...
+...
+FINISH Running Migrations ...
 ```
 
 ### Dumping Schema
