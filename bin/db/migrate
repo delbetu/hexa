@@ -4,6 +4,9 @@ case $RACK_ENV in
   "test")
     source .env.test
     ;;
+  "docker")
+    source .env.docker
+    ;;
   "production")
     # In production vars are configured in heroku settings
     ;;
@@ -12,7 +15,7 @@ case $RACK_ENV in
     ;;
 esac
 
-sequel -E -m $APP_ROOT/db/migrate $DATABASE_URL
+bundle exec sequel -E -m $APP_ROOT/db/migrate $DATABASE_URL
 
 echo "Project location ${APP_ROOT}"
 echo "Database ${DATABASE_URL}"
