@@ -1,5 +1,7 @@
-- [ ] usar graphiql???
+- [ ] usar graphiql??? query para devolver todo el schema?? prisma-graphql-playground vs graphiql apolo-client?? https://www.howtographql.com/graphql-ruby/0-introduction/
 - [ ] gql endpoint for schema???
+- [ ] [Implementar] cuando viene una peticion que precisa autorizacion, desencodiar el token, y verificar si tiene acceso a la peticion actual
+- [ ] Grabar una implementacion demo mostrando como se programa con hexa, partiendo de la definicion de un caso de uso.
 - [ ] Crear un Reporter que encapsule Raven ( Sentry ) y el logger de heroku??, que sea visible de todos lados??
 - [ ] test sign_up user creator adapter
 - [ ] test sign_up email confirmator adapter

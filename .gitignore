@@ -8,4 +8,5 @@
 **/tmp/
 **/.byebug_history
 /.env
+/.env.docker
 /.bundle
