@@ -69,6 +69,7 @@ GEM
     rack (2.2.3)
     rack-contrib (2.2.0)
       rack (~> 2.0)
+    rack-graphiql (0.1.1)
     rack-protection (2.0.8.1)
       rack
     rack-test (1.1.0)
@@ -139,6 +140,7 @@ DEPENDENCIES
   pony
   pry
   rack-contrib
+  rack-graphiql
   rake
   rspec
   sentry-raven

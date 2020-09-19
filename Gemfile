@@ -23,6 +23,7 @@ group :test, :development do
   gem 'sqlite3'
   gem 'shotgun'
   gem 'mailcatcher'
+  gem 'rack-graphiql'
 end
 
 group :test do
