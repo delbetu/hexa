@@ -7,21 +7,21 @@ Well, actually all depends on you but at least it doesn't limit you
 (you know, usually your logic depends on the framework when should be the opposite).
 I encourage you to see this [keynote](https://www.youtube.com/watch?v=WpkDN78P884) which was the starting motivation of `Hexa`
 
-Embrace separation of concerns
+**Embrace separation of concerns**  
 It primary design mission is to keep side-effects, business-logic, and presentation-logic separated from each other.
 
-It is Use-Case centered.
+**It is Use-Case centered**  
 A use-case is defined as a set of actions reflecting user-intentions coming from the browser to the system.
 
 In order to allow features scalability without making your code a mess.
 This "framework" divides the whole application into smaller applications.
-Each of these smaller applications represents just one use case.
+Each of these smaller applications represents just one use case.  
 ![folder structure]()
-And follows an [hexagonal architecture](<https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)>)
-So each use-case has its own API - BusinessLogic - DBAccess within a small scope that you can easily navigate.
+These small applications follow an [hexagonal architecture](<https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)>)  
+So each use-case has its own `API - BusinessLogic - DBAccess` within a small scope that you can easily navigate.  
 
 The fact that is use-case centered suggest that you can take advantages of documenting your [DSS](https://en.wikipedia.org/wiki/System_sequence_diagram)
-I know, maitaining that is a pain in the ass, but working on a big project with many other devs is the high level picture that you would wish to have.
+I know, maitaining that is a pain in the ass, but working on a big project with many other devs is the high level picture that you would wish to have.  
 
 ## Starting up the application
 
