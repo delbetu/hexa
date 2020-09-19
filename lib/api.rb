@@ -40,14 +40,36 @@ end
 
 require 'shared/adapters/users_adapter'
 require 'ostruct'
-class UsersQuery < GraphQL::Schema::Object
-  description "The query root of this schema"
 
-  field :users, [Types::User], null: true
+module UsersQuery
+  def self.included(child_class)
+    child_class.field :users, [Types::User], 'fetch users', null: true
+  end
 
   def users
     Adapters::Users.read
   end
+end
+
+module Resolvers
+  class Base < GraphQL::Schema::Resolver
+    # argument_class Arguments::Base
+  end
+end
+module Resolvers
+  class OtherUsersQuery < Resolvers::Base
+    type [Types::User], null: true
+
+    def resolve
+      Adapters::Users.read
+    end
+  end
+end
+
+class Types::QueryType < GraphQL::Schema::Object
+  description "The query root of this schema"
+  include UsersQuery
+  field :other_users, resolver: Resolvers::OtherUsersQuery, description: 'other users query'
 end
 
 require 'sign_up/infrastructure/graphql/api_v1'
@@ -58,7 +80,7 @@ class Types::MutationType < GraphQL::Schema::Object
 end
 
 class GraphqlEndpoint < GraphQL::Schema
-  query UsersQuery
+  query Types::QueryType
   mutation Types::MutationType
 end
 
