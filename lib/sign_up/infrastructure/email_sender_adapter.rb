@@ -5,8 +5,8 @@ class EmailSenderAdapter
 
   def self.send_signup_confirmation(invitation_id:, name:, email:)
     body = Templates.load_erb('email_confirmation', {
-        confirm_success_url: "https://myapp.com/confirm_email?invitation_id=#{invitation_id}",
-        confirm_fraud_url: "https://myapp.com/reject_signup?invitation_id=#{invitation_id}",
+        confirm_success_url: "#{ENV['BASE_URL']}/email_confirmation?invitation_id=#{invitation_id}",
+        confirm_fraud_url: "#{ENV['BASE_URL']}/email_confirmation?invitation_id=#{invitation_id}&reject=true",
         name: name
     })
 

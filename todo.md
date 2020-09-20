@@ -1,11 +1,11 @@
-- [ ] usar graphiql??? query para devolver todo el schema?? prisma-graphql-playground vs graphiql apolo-client?? https://www.howtographql.com/graphql-ruby/0-introduction/
-- [ ] gql endpoint for schema???
+- [ ] Agregar folder prototype: que es donde irian los crud agarrado a graphql ( esto tiene que tener un generador de codigo asi es facil tener algo pronto en 2 minutos )
 - [ ] [Implementar] cuando viene una peticion que precisa autorizacion, desencodiar el token, y verificar si tiene acceso a la peticion actual
 - [ ] Grabar una implementacion demo mostrando como se programa con hexa, partiendo de la definicion de un caso de uso.
 - [ ] Crear un Reporter que encapsule Raven ( Sentry ) y el logger de heroku??, que sea visible de todos lados??
 - [ ] test sign_up user creator adapter
 - [ ] test sign_up email confirmator adapter
 - [ ] deploy a servidor gratis diferente de heroku https://dev.to/vuelancer/free-deployment-providers-bk0
+- [X] instalar graphiql
 - [x] Testear e implementar el Mailer
 - [x] Borrar los port
 - [x] Borrar las interfaces

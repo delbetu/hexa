@@ -2,7 +2,7 @@ require 'sign_up/domain/user'
 require 'shared/domain/action_result'
 require 'shared/authorization/domain/password'
 
-# Used when a user tries to sign up itself (not inviting others)
+# Used when a user tries to sign up himself (not inviting others)
 # Example: Candidates can sign_up themselves. HRs need invitation from hr team owner.
 class SignUp
   # Inject collaborators dependencies
