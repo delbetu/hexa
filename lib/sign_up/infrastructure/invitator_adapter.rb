@@ -39,9 +39,7 @@ class InvitatorAdapter
 
   def confirm(invitation_id:)
     DB.transaction do
-      invitations = Adapters::Invitations.read(filters: [uuid: invitation_id])
-      invitation = invitations.first
-      raise "No invitation found" unless invitation
+      invitation = retrive_invitation(invitation_id)
       invitation[:status] = 'confirmed'
       Adapters::Invitations.update(invitation)
 
@@ -50,10 +48,19 @@ class InvitatorAdapter
   end
 
   def reject(invitation_id:)
-    DB[:invitations].where(uuid: invitation_id).delete
+    invitation = retrive_invitation(invitation_id)
+    invitation[:status] = 'rejected'
+    Adapters::Invitations.update(invitation)
   end
 
   private
 
   attr_reader :authorizer
+
+  def retrive_invitation(uuid)
+    invitations = Adapters::Invitations.read(filters: [uuid: uuid])
+    invitation = invitations.first
+    assert(invitation, "No invitation found")
+    invitation
+  end
 end

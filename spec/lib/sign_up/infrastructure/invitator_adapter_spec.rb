@@ -67,7 +67,13 @@ describe InvitatorAdapter do
     it 'removes the given invitation' do
       subject.reject(invitation_id: existing_uuid)
 
-      expect(Adapters::Invitations.read).to be_empty
+      expect(
+        Adapters::Invitations.read(filters: [{ uuid: existing_uuid }]).first
+      ).to match(
+        hash_including(
+          status: 'rejected'
+        )
+      )
     end
   end
 end
