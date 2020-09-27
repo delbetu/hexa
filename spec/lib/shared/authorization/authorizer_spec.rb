@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'shared/authorization/authorizer'
+require 'shared/adapters/users_adapter'
 
 describe Authorizer do
   let(:pwd_hash) { UserBuilder.pwd_hash_for(:pass123!) }
@@ -92,6 +93,30 @@ describe Authorizer do
         internal_user = subject.send(:authenticated_user)
         expect(internal_user[:roles]).to eq(existing_roles + new_roles)
       end
+    end
+  end
+
+  describe 'grant_access_to_user' do
+    let(:user) { build_user.with(roles: ['guest']).build }
+    let!(:user_crud) do
+      #  Given an existing user with role guest
+      user_crud = double('user_crud', read: [user])
+      allow(user_crud).to receive(:update).and_return(roles: [ 'cadidate', 'guest' ])
+      user_crud
+    end
+
+    it 'finds the user and add roles to it in the database' do
+      result = subject.grant_roles_to_user(email: user[:email], roles: ['candidate'])
+
+      expect(result).to match(
+        hash_including(
+          roles: [ 'cadidate', 'guest' ]
+        )
+      )
+    end
+
+    context 'when assigning same role twice' do
+      xit 'does not duplicate the role' do end
     end
   end
 end

@@ -2,6 +2,7 @@ require 'shared/authorization/domain/token'
 require 'shared/authorization/domain/password'
 require 'shared/errors'
 
+# Wraps an authenticated user
 class Authorizer
   NotAuthorizedError = Class.new(EndUserError)
 
@@ -28,12 +29,12 @@ class Authorizer
     password_matches = (Password.decrypt(user[:password]) == password)
     assert(password_matches, "Email or password do not match.")
 
-    @authenticated_user = user
+    @user = user
   end
 
   def get_permissions
-    raise Authorizer::NotAuthorizedError unless authenticated_user
-    roles = authenticated_user[:roles]
+    raise Authorizer::NotAuthorizedError unless user
+    roles = user[:roles]
 
     roles.map { |role| PERMISSIONS[role.to_sym] }.flatten.compact
   end
@@ -43,17 +44,26 @@ class Authorizer
   end
 
   def grant_access(roles: [])
-    raise Authorizer::NotAuthorizedError unless authenticated_user
+    raise Authorizer::NotAuthorizedError unless user
 
-    current_roles = authenticated_user[:roles]
+    current_roles = user[:roles]
     new_roles = current_roles + roles
 
-    resulting_roles = authorization_data.update(authenticated_user.merge(roles: new_roles))
-    self.authenticated_user = authenticated_user.merge(resulting_roles)
+    resulting_roles = authorization_data.update(user.merge(roles: new_roles))
+    self.user = user.merge(resulting_roles)
   end
+
+  def grant_roles_to_user(email:, roles:)
+    user = authorization_data.read(filters: [ { email: email } ]).first
+    assert(!user.nil?, "No user found")
+
+    @user = user
+    grant_access(roles: roles)
+  end
+
 
   private
 
   attr_reader :authorization_data
-  attr_accessor :authenticated_user
+  attr_accessor :user
 end

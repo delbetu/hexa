@@ -13,6 +13,9 @@ class ErrorsSerializer
   attributes :errors
 end
 
+# TODO: add rack body parser middleware
+# require 'rack-contrib'
+# use Rack::PostBodyContentTypeParser
 post '/users' do
   body = request.body.read.to_s
   user_attributes = params[:user] || JSON.parse(body)['user'] # accept form data or json
@@ -26,4 +29,20 @@ post '/users' do
   else
     ErrorsSerializer.new(result)
   end.serialized_json
+end
+
+get '/email_confirmation' do
+  invitation_id = params['invitation_id'] || "TODO: return error"
+  # what happens if the invitation id doesn't exists
+  reject = params['reject'] == 'true' || false
+
+  result = ConfirmInvitation
+    .new(invitator: InvitatorAdapter.new)
+    .call(invitation_id: invitation_id, reject: reject)
+
+  if result.success?
+    redirect to('/')
+  else
+    redirect to('/500.html')
+  end
 end
