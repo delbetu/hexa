@@ -22,7 +22,7 @@ class ErrorResult < SimpleDelegator
   end
 end
 
-def ActionSuccess(attrs)
+def ActionSuccess(attrs = {})
   SuccessResult.new(OpenStruct.new(attrs))
 end
 

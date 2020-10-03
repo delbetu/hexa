@@ -24,8 +24,6 @@ describe InvitatorAdapter do
   end
 
   describe '#find' do
-    xit 'raise error when it does not exists in the database'
-
     let!(:uuid) {
       subject.invite(email: 'bruce@batcave.com', roles: ['candidate'])
     }
@@ -41,6 +39,13 @@ describe InvitatorAdapter do
           uuid: uuid
         )
       )
+    end
+
+    # TODO: should find raise an error or should return a Maybe ?
+    it 'raise error when it does not exists in the database' do
+      expect {
+        subject.find(invitation_id: '99999999-9999-9999-9999-999999999999')
+      }.to raise_error(EndUserError, 'No invitation found')
     end
   end
 

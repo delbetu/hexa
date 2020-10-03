@@ -1,3 +1,5 @@
+require 'shared/errors'
+
 class String
   def singularize
     return chop if downcase.end_with? "s"
@@ -40,7 +42,6 @@ end
 def assert(condition, message = "Assertion failed")
   raise EndUserError, message, caller unless condition
 end
-
 
 def with_error_handling(error_id = "Error", &block)
   block.call

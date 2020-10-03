@@ -4,6 +4,10 @@ require 'shared/adapters/sequel/crud'
 module MyResource
   extend Adapters::Sequel::Crud
   with(table: :my_resources, json_columns: [:json_column])
+  # TODO: pending support different id column.
+  # say I want to perform find and update by uuid or email instead of id
+  # then I specify in this resource
+  # "identifier_colum :uuid" and the operations use this attribute
 end
 
 describe MyResource do
@@ -23,6 +27,7 @@ describe MyResource do
   let!(:product1) { { name: 'Product1', price: 100.0, json_column: { some_data: 200 } } }
   let!(:product2) { { name: 'Product2', price: 150.0, json_column: { some_data: 500 } } }
 
+  xit 'support different identifier columns'
   describe '.read' do
     before do
       MyResource.create(product1)

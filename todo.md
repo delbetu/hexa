@@ -1,3 +1,4 @@
+- [ ] Test endpoint with db and gql
 - [ ] Agregar folder prototype: que es donde irian los crud agarrado a graphql ( esto tiene que tener un generador de codigo asi es facil tener algo pronto en 2 minutos )
 - [ ] [Implementar] cuando viene una peticion que precisa autorizacion, desencodiar el token, y verificar si tiene acceso a la peticion actual
 - [ ] Grabar una implementacion demo mostrando como se programa con hexa, partiendo de la definicion de un caso de uso.
@@ -5,13 +6,6 @@
 - [ ] test sign_up user creator adapter
 - [ ] test sign_up email confirmator adapter
 - [ ] deploy a servidor gratis diferente de heroku https://dev.to/vuelancer/free-deployment-providers-bk0
-- [X] instalar graphiql
-- [x] Testear e implementar el Mailer
-- [x] Borrar los port
-- [x] Borrar las interfaces
-- [x] Sign Up improve error when email is already taken
-- [x] Improve Crud
-- [x] Sign up no esta guardando un hash en el password ( esta guardando el password en plano )
-- [x] Postman el gql de signup user esta mal
-- [x] Add postman for rest sign in
-- [x] Add gql for sign in
+- [X] merge MyAuthorizer with shared authorizer
+- [X] Test domain invitation
+- [X] test use case action ConfirmInvitation
