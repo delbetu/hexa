@@ -37,7 +37,7 @@ GEM
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
     json (2.3.1)
-    jwt (2.2.1)
+    jwt (2.2.2)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     mailcatcher (0.2.4)
