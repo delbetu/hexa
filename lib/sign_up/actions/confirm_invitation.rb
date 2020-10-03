@@ -13,10 +13,10 @@ class ConfirmInvitation
       # authorization anybody with the link can confirm invitation
 
       # Gather data & input parsing
-      invitation_attrs = invitator.find(invitation_id)
+      invitation_attrs = invitator.find(invitation_id: invitation_id)
 
       # Perform Job chain ( in transaction mode )
-      invitation = Invitation.new(**invitation_attrs)
+      invitation = Invitation.new(**invitation_attrs.except(:created_at))
       new_status = reject ? 'rejected' : 'confirmed'
       invitation.status = new_status
 

@@ -1,6 +1,7 @@
 require 'shared/authorization/domain/token'
 require 'shared/authorization/domain/password'
 require 'shared/errors'
+require 'shared/authorization/infrastructure/auth_data_provider_adapter'
 
 # Wraps an authenticated user
 class Authorizer

@@ -1,4 +1,5 @@
 require 'sign_up/actions/sign_up'
+require 'sign_up/actions/confirm_invitation'
 require 'sign_up/infrastructure/invitator_adapter'
 require 'sign_up/infrastructure/user_creator_adapter'
 require 'sign_up/infrastructure/email_sender_adapter'
