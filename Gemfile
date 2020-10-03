@@ -3,7 +3,7 @@
 source 'http://rubygems.org'
 ruby '2.7.1'
 
-gem 'bcrypt', '~> 3.1.13', platform: :ruby
+gem 'bcrypt', '~> 3.1.16', platform: :ruby
 gem 'fast_jsonapi'
 gem 'pg'
 gem 'pry'
