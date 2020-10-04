@@ -24,6 +24,7 @@ group :test, :development do
   gem 'shotgun'
   gem 'mailcatcher'
   gem 'rack-graphiql'
+  gem 'rubocop', require: false
 end
 
 group :test do
