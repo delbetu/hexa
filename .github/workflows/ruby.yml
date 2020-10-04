@@ -27,6 +27,9 @@ jobs:
       uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
       with:
         ruby-version: 2.7.1
+      env:
+        RACK_ENV: test
+        APP_ROOT: $GITHUB_WORKSPACE
     - name: Install dependencies
       run: bundle install
     - name: Run tests
