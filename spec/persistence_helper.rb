@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Use an in-memory database implementation
 
 require 'sqlite3'
@@ -10,6 +12,6 @@ Sequel::Migrator.run(DB, "#{APP_ROOT}/db/migrate")
 
 RSpec.configure do |config|
   config.around(:each) do |example|
-    DB.transaction(:rollback=>:always, :auto_savepoint=>true){example.run}
+    DB.transaction(rollback: :always, auto_savepoint: true) { example.run }
   end
 end

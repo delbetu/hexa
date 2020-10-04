@@ -1,0 +1,23 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2 
+
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.7.1
+    executor: ruby/default
+    steps:
+      - checkout
+      - run:
+          name: Which bundler?
+          command: bundle -v
+      - run:
+          name: install gems
+          command: bundle install
+      - run:
+          name: test
+          command: bundle exec rspec
+    environment:
+      RACK_ENV: test
+      APP_ROOT: /home/circleci/project
