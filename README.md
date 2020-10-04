@@ -1,3 +1,6 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/e8cc63010f871fc42893/maintainability)](https://codeclimate.com/github/delbetu/hexa/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/e8cc63010f871fc42893/test_coverage)](https://codeclimate.com/github/delbetu/hexa/test_coverage)
+
 # What is Hexa?
 
 Hexa can be considered a light way Framework.
@@ -18,10 +21,10 @@ This "framework" divides the whole application into smaller applications.
 Each of these smaller applications represents just one use case.  
 ![folder structure]()
 These small applications follow an [hexagonal architecture](<https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)>)  
-So each use-case has its own `API - BusinessLogic - DBAccess` within a small scope that you can easily navigate.  
+So each use-case has its own `API - BusinessLogic - DBAccess` within a small scope that you can easily navigate.
 
 The fact that is use-case centered suggest that you can take advantages of documenting your [DSS](https://en.wikipedia.org/wiki/System_sequence_diagram)
-I know, maitaining that is a pain in the ass, but working on a big project with many other devs is the high level picture that you would wish to have.  
+I know, maitaining that is a pain in the ass, but working on a big project with many other devs is the high level picture that you would wish to have.
 
 ## Starting up the application
 
