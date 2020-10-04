@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'shared/domain/action_result'
 require 'sign_up/domain/invitation'
 
@@ -9,7 +11,7 @@ class ConfirmInvitation
   end
 
   def call(invitation_id:, reject:)
-    with_error_handling "Confirm Invitation Error" do
+    with_error_handling 'Confirm Invitation Error' do
       # authorization anybody with the link can confirm invitation
 
       # Gather data & input parsing
@@ -17,12 +19,14 @@ class ConfirmInvitation
 
       # Perform Job chain ( in transaction mode )
       invitation = Invitation.new(**invitation_attrs.except(:created_at))
-      new_status = reject ? 'rejected' : 'confirmed'
-      invitation.status = new_status
 
       # transaction do
+      new_status = reject ? 'rejected' : 'confirmed'
+      invitation.status = new_status
       invitator.update(invitation.to_h)
-      authorizer.grant_roles_to_user(email: invitation.email, roles: invitation.roles)
+      if new_status != 'rejected'
+        authorizer.grant_roles_to_user(email: invitation.email, roles: invitation.roles)
+      end
       # end
 
       ActionSuccess()
