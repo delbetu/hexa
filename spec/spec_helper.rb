@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 ENV['RACK_ENV'] = 'test'
+require 'simplecov'
+SimpleCov.start
 
 require 'load_gems'
 require 'byebug'
 require 'factories'
 
 ############### Load Support Files ###############
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
+Dir[File.expand_path(File.join(File.dirname(__FILE__), 'support', '**', '*.rb'))].sort.each { |f| require f }
 
 ############### Do not send real emails while testing ###############
 Mail.defaults do
