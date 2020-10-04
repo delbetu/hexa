@@ -5,11 +5,19 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.7-node
+      - image: circleci/ruby:2.7.1
     executor: ruby/default
     steps:
       - checkout
       - run:
           name: Which bundler?
           command: bundle -v
-      - ruby/bundle-install
+      - run:
+          name: install gems
+          command: bundle install
+      - run:
+          name: test
+          command: bundle exec rspec
+    environment:
+      RACK_ENV: test
+      APP_ROOT: /home/circleci/project

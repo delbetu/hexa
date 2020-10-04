@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def env
   ENV['RACK_ENV'] || 'development'
 end
@@ -18,9 +20,12 @@ end
 
 if env != 'production'
   require 'dotenv'
-  Dotenv.overload(".env") if env == 'development'
-  Dotenv.overload(".env.test") if env == 'test'
-  Dotenv.overload(".env.docker") if env == 'docker'
+  Dotenv.overload('.env') if env == 'development'
+  if env == 'test'
+    Dotenv.load('.env.test') # do not override already defined vars
+  end
+
+  Dotenv.overload('.env.docker') if env == 'docker'
 
   puts "DATABASE_URL #{ENV['DATABASE_URL']}"
 end
@@ -29,8 +34,8 @@ APP_ROOT = ENV.fetch('APP_ROOT', Dir.pwd)
 $LOAD_PATH << "#{APP_ROOT}/lib"
 
 ENV['BUNDLE_GEMFILE'] ||= File.join(APP_ROOT, '/', 'Gemfile')
-require "rubygems"
-require "bundler"
+require 'rubygems'
+require 'bundler'
 Bundler.require(:default, ENV['RACK_ENV'].to_sym)
 
 ################## config gems for different environments ##################
@@ -58,7 +63,7 @@ when 'production'
       user_name: ENV['SMTP_GMAIL_USERNAME'],
       password: ENV['SMTP_GMAIL_PASSWORD'],
       authentication: :plain, # :plain, :login, :cram_md5, no auth by default
-      domain: "localhost.localdomain" # the HELO domain provided by the client to the server
+      domain: 'localhost.localdomain' # the HELO domain provided by the client to the server
     }
   }
 when 'development'
@@ -70,7 +75,7 @@ when 'development'
     }
   }
 else # test
-  Pony.override_options = { :via => :test  }
+  Pony.override_options = { via: :test }
 end
 
 require 'extensions'
