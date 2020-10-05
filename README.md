@@ -18,23 +18,10 @@ A use-case is defined as a set of actions reflecting user-intentions coming from
 In order to allow features scalability without making your code a mess.
 This "framework" divides the whole application into smaller applications.
 Each of these smaller applications represents just one use case.
-```
-lib/sign_up/
-|-- actions
-|   |-- confirm_invitation.rb
-|   `-- sign_up.rb
-|-- domain
-|   |-- invitation.rb
-|   `-- user.rb
-`-- infrastructure
-    |-- email_sender_adapter.rb
-    |-- graphql
-    |   `-- api_v1.rb
-    |-- invitator_adapter.rb
-    |-- rest
-    |   `-- api_v1.rb
-    `-- user_creator_adapter.rb
-```
+
+
+![Folders-DSS](https://user-images.githubusercontent.com/3356799/95077099-50f03c00-06e9-11eb-946e-5dbebb20d75a.png)
+
 These small applications follow a [hexagonal architecture](<https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)>)  
 So each use-case has its own `API - BusinessLogic - DBAccess` within a small scope that you can easily navigate.
 
