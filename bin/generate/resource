@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'erb'
+require 'byebug'
+
+def process_arguments
+  resource_name, *columns = ARGV
+  # pluralize if it is not
+  resource_name = "#{resource_name}s" unless resource_name.downcase.end_with? 's'
+
+  gql_attributes = columns.map { |x| x.split(":") }.to_h
+
+  table_name = resource_name
+    .gsub(/::/, '/')
+    .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+    .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+    .tr('-', '_')
+    .downcase
+
+  {
+    resource_name: resource_name,
+    table_name: table_name,
+    gql_attributes: gql_attributes
+  }
+end
+
+# expected call:
+# bin/generate/resource JobPosts posted_on:DateTime active:Boolean description:String
+args = process_arguments
+puts "Creating resource for #{args}"
+
+template = File.read('bin/generate/resource_template.rb.erb')
+
+generated_resource_file = ERB.new(
+  template
+).result_with_hash(
+  args
+)
+
+new_filename = "lib/prototype/#{args[:table_name]}.rb"
+File.write(new_filename, generated_resource_file)
+
+puts "File created: #{new_filename}"

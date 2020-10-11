@@ -1,52 +1,54 @@
+<%
+  resource_name ||= 'Resources'
+  singular_resource_name = resource_name.delete_suffix('s')
+  table_name ||= 'resources'
+  gql_attributes ||= {
+    attr: 'String'
+  }
+%>
+
 # frozen_string_literal: true
 
 require 'shared/adapters/sequel/crud'
 
 module Adapters
-  module JobPosts
+  module <%= resource_name %>
     extend Adapters::Sequel::Crud
-    with(table: :job_posts)
+    with(table: :<%= table_name %>)
   end
 end
 
-# posted_on, company_name, company_website, company_logo, company_location,
-# tags = backend contract programming anywhere
-# rich text description
-# offered_payment
-# active: boolean
 module Types
-  class JobPost < BaseObject
-    description 'JobPosts'
+  class <%= singular_resource_name %> < BaseObject
+    description '<%= resource_name %>'
 
     field :id, ID, null: false
-    field :posted_on, GraphQL::Types::ISO8601DateTime, null: false
-    field :active, Boolean, null: false
-    field :company_name, String, null: false
-    field :rich_description, String, null: false
+    <% gql_attributes.each do |attr_name, attr_type| %>
+      <%= "field :#{attr_name}, #{attr_type}, null: false" %>
+    <% end %>
   end
 end
 
 module Resolvers
-  class JobPostsQuery < Resolvers::Base
-    type [Types::JobPost], null: true
+  class <%= resource_name %>Query < Resolvers::Base
+    type [Types::<%= singular_resource_name %>], null: true
 
     def resolve
-      Adapters::JobPosts.read
+      Adapters::<%= resource_name %>.read
     end
   end
 end
 
 module Mutations
-  class CreateJobPost < BaseMutation
+  class Create<%= singular_resource_name %> < BaseMutation
     null true
 
     description 'Creates a job post'
 
     # Input
-    argument :posted_on, GraphQL::Types::ISO8601DateTime, required: true
-    argument :active, Boolean, required: true
-    argument :company_name, String, required: true
-    argument :rich_description, String, required: true
+    <% gql_attributes.each do |attr_name, attr_type| %>
+      <%= "argument :#{attr_name}, #{attr_type}, required: true" %>
+    <% end %>
 
     # Output
     field :success, Boolean, null: false
@@ -54,7 +56,7 @@ module Mutations
     field :id, ID, null: true
 
     def resolve(posted_on:, active:, company_name:, rich_description:)
-      created = Adapters::JobPosts.create(
+      created = Adapters::<%= resource_name %>.create(
         posted_on: posted_on,
         active: active,
         company_name: company_name,
@@ -72,17 +74,16 @@ module Mutations
     end
   end
 
-  class UpdateJobPost < BaseMutation
+  class Update<%= singular_resource_name %> < BaseMutation
     null true
 
     description 'Updates a job post'
 
     # Input
     argument :id, ID, required: true
-    argument :posted_on, GraphQL::Types::ISO8601DateTime, required: false
-    argument :active, Boolean, required: false
-    argument :company_name, String, required: false
-    argument :rich_description, String, required: false
+    <% gql_attributes.each do |attr_name, attr_type| %>
+      <%= "argument :#{attr_name}, #{attr_type}, required: false" %>
+    <% end %>
 
     # Output
     field :success, Boolean, null: false
@@ -97,7 +98,7 @@ module Mutations
         company_name: company_name,
         rich_description: rich_description
       }.compact
-      updated = Adapters::JobPosts.update(update_attrs)
+      updated = Adapters::<%= resource_name %>.update(update_attrs)
 
       {
         success: true
@@ -110,7 +111,7 @@ module Mutations
     end
   end
 
-  class DeleteJobPost < BaseMutation
+  class Delete<%= singular_resource_name %> < BaseMutation
     null true
 
     description 'Deletes a job post'
@@ -124,7 +125,7 @@ module Mutations
     field :id, ID, null: false
 
     def resolve(id:)
-      deleted = Adapters::JobPosts.delete(
+      deleted = Adapters::<%= resource_name %>.delete(
         id: id
       )
 
