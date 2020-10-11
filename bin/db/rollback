@@ -1,0 +1,22 @@
+#!/bin/bash
+echo "START Rollback to $1"
+case $RACK_ENV in
+  "test")
+    source .env.test
+    ;;
+  "docker")
+    source .env.docker
+    ;;
+  "production")
+    # In production vars are configured in heroku settings
+    ;;
+  *)
+    source .env
+    ;;
+esac
+
+bundle exec sequel -E -m $APP_ROOT/db/migrate -M "$1" $DATABASE_URL
+
+echo "Project location ${APP_ROOT}"
+echo "Database ${DATABASE_URL}"
+echo "FINISH Rollback to $1"

@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'shared/errors'
 
 module Adapters
   module Sequel
     module Crud
-
       def with(table:, json_columns: [])
         @table = table.freeze
         @json_columns = json_columns.freeze
@@ -17,9 +18,13 @@ module Adapters
         attributes = serialize_json_columns(attributes, @json_columns).symbolize_keys
 
         id = DB[@table].insert(attributes)
-        attributes.merge!(id: id)
+        attributes[:id] = id
         attributes
       rescue ::Sequel::DatabaseError => e
+        # Log errr and avoid user to receive it
+        logger = Logger.new('log/development.log')
+        logger.error(e.message)
+        logger.error(e.backtrace)
         Raven.capture_exception(e)
         raise CreateError, "Error creating #{entity_name} with #{attributes}"
       end
@@ -48,10 +53,11 @@ module Adapters
         end
 
         if !!options[:sort]
-          sort_attributes = options[:sort].is_a?(Array) ? options.dig(:sort) : [options.dig(:sort)]
+          sort_attributes = options[:sort].is_a?(Array) ? options[:sort] : [options[:sort]]
 
           sort_attributes.each do |sort_option|
-            attr, direction = sort_option[:attr], sort_option[:direction]
+            attr = sort_option[:attr]
+            direction = sort_option[:direction]
             raise('attr must be present') unless attr
 
             order =
@@ -73,13 +79,14 @@ module Adapters
       # returns only the affected attributes
       def update(attributes)
         id = attributes.delete(:id)
-        raise UpdateError, "id is required for update" unless id
+        raise UpdateError, 'id is required for update' unless id
+
         attributes = serialize_json_columns(attributes, @json_columns)
 
         affected_rows = DB[@table].where(id: id).update(attributes)
-        raise UpdateError, "#{entity_name} with id: #{id} not found" if affected_rows == 0
+        raise UpdateError, "#{entity_name} with id: #{id} not found" if affected_rows.zero?
 
-        attributes.merge!(id: id)
+        attributes[:id] = id
         attributes
       rescue ::Sequel::DatabaseError => e
         raise UpdateError, "Error updating #{entity_name} with #{attributes}"
@@ -88,7 +95,7 @@ module Adapters
       def delete(id:)
         row_to_delete = DB[@table].where(id: id).first
         affected_rows = DB[@table].where(id: id).delete
-        raise DeleteError, "#{entity_name} with id: #{id} not found" if affected_rows == 0
+        raise DeleteError, "#{entity_name} with id: #{id} not found" if affected_rows.zero?
 
         row_to_delete
       rescue ::Sequel::DatabaseError => e

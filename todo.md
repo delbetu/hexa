@@ -1,5 +1,6 @@
-- [ ] Configurar CI ( GH Actions )
-- [ ] Configurar CC coverage
+- [ ] Crear generador de crud ( in progress )
+- [ ] GH hook para hacer autodeploy de master branch
+- [ ] Mejorar la estrategia de logs. (hacer que todo se loguee en 'log/<environment.log>')
 - [ ] Agregar folder prototype: que es donde irian los crud agarrado a graphql ( esto tiene que tener un generador de codigo asi es facil tener algo pronto en 2 minutos )
 - [ ] [Implementar] cuando viene una peticion que precisa autorizacion, desencodiar el token, y verificar si tiene acceso a la peticion actual
 - [ ] [Implementar] hacer un recurso job_post considerando que los external_collaborator colaboran con un internal_hr (pertenecen al mismo team)
@@ -20,8 +21,3 @@
 - [ ] test sign_up user creator adapter
 - [ ] test sign_up email confirmator adapter
 - [ ] deploy a servidor gratis diferente de heroku https://dev.to/vuelancer/free-deployment-providers-bk0
-- [x] Test email confirmation endpoint with db and gql
-- [x] merge MyAuthorizer with shared authorizer
-- [x] Test domain invitation
-- [x] test use case action ConfirmInvitation
-- [X] Manual testing email confirmation

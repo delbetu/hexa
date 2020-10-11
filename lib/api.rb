@@ -56,27 +56,24 @@ module Resolvers
     # argument_class Arguments::Base
   end
 end
-module Resolvers
-  class OtherUsersQuery < Resolvers::Base
-    type [Types::User], null: true
 
-    def resolve
-      Adapters::Users.read
-    end
-  end
-end
+####################### Graphql Routes #######################
+require 'sign_up/infrastructure/graphql/api_v1'
+require 'sign_in/infrastructure/graphql/api_v1'
+require_relative 'prototype/job_posts'
 
 class Types::QueryType < GraphQL::Schema::Object
   description "The query root of this schema"
   include UsersQuery
-  field :other_users, resolver: Resolvers::OtherUsersQuery, description: 'other users query'
+  field :job_posts, resolver: Resolvers::JobPostsQuery, description: 'other users query'
 end
 
-require 'sign_up/infrastructure/graphql/api_v1'
-require 'sign_in/infrastructure/graphql/api_v1'
 class Types::MutationType < GraphQL::Schema::Object
   field :sign_in, mutation: Mutations::SignIn
   field :sign_up, mutation: Mutations::SignUp
+  field :create_job_post, mutation: Mutations::CreateJobPost
+  field :update_job_post, mutation: Mutations::UpdateJobPost
+  field :delete_job_post, mutation: Mutations::DeleteJobPost
 end
 
 class GraphqlEndpoint < GraphQL::Schema
