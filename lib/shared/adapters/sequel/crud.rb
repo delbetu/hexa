@@ -21,10 +21,11 @@ module Adapters
         attributes[:id] = id
         attributes
       rescue ::Sequel::DatabaseError => e
+        # TODO: failing on ci.
         # Log errr and avoid user to receive it
-        logger = Logger.new('log/development.log')
-        logger.error(e.message)
-        logger.error(e.backtrace)
+        # logger = Logger.new('log/development.log')
+        # logger.error(e.message)
+        # logger.error(e.backtrace)
         Raven.capture_exception(e)
         raise CreateError, "Error creating #{entity_name} with #{attributes}"
       end
