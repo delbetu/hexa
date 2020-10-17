@@ -25,3 +25,4 @@
       2020-10-11T21:46:36.403800+00:00 app[web.1]: NameError: uninitialized constant Rack::GraphiQL
       2020-10-11T21:46:36.403802+00:00 app[web.1]: Did you mean? GraphQL
       2020-10-11T21:46:36.403803+00:00 app[web.1]: /app/config.ru:7:in `block (2 levels) in <main>'
+
