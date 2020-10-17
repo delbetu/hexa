@@ -17,6 +17,7 @@ gem 'sentry-raven'
 gem 'sequel'
 gem 'sidekiq'
 gem 'sinatra'
+gem 'rack-graphiql'
 
 group :test, :development do
   gem 'byebug'
