@@ -1,8 +1,3 @@
-- [ ] Error deploy production
-      2020-10-11T21:46:36.403800+00:00 app[web.1]: NameError: uninitialized constant Rack::GraphiQL
-      2020-10-11T21:46:36.403802+00:00 app[web.1]: Did you mean? GraphQL
-      2020-10-11T21:46:36.403803+00:00 app[web.1]: /app/config.ru:7:in `block (2 levels) in <main>'
-- [ ] GH hook para hacer autodeploy de master branch
 - [ ] Mejorar la estrategia de logs. (hacer que todo se loguee en 'log/<environment.log>')
 - [ ] Agregar folder prototype: que es donde irian los crud agarrado a graphql ( esto tiene que tener un generador de codigo asi es facil tener algo pronto en 2 minutos )
 - [ ] [Implementar] cuando viene una peticion que precisa autorizacion, desencodiar el token, y verificar si tiene acceso a la peticion actual
@@ -24,4 +19,9 @@
 - [ ] test sign_up user creator adapter
 - [ ] test sign_up email confirmator adapter
 - [ ] deploy a servidor gratis diferente de heroku https://dev.to/vuelancer/free-deployment-providers-bk0
+- [X] GH hook para hacer autodeploy de master branch
 - [X] Crear generador de crud
+- [X] Error deploy production
+      2020-10-11T21:46:36.403800+00:00 app[web.1]: NameError: uninitialized constant Rack::GraphiQL
+      2020-10-11T21:46:36.403802+00:00 app[web.1]: Did you mean? GraphQL
+      2020-10-11T21:46:36.403803+00:00 app[web.1]: /app/config.ru:7:in `block (2 levels) in <main>'
