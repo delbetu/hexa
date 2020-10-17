@@ -16,14 +16,15 @@ gem 'sentry-raven'
 gem 'sequel'
 gem 'sidekiq'
 gem 'sinatra'
+gem 'rack-graphiql'
 
 group :test, :development do
   gem 'byebug'
   gem 'dotenv'
   gem 'mailcatcher'
-  gem 'rack-graphiql'
   gem 'rubocop', require: false
   gem 'shotgun'
+  gem 'sqlite3'
 end
 
 group :test do
@@ -33,5 +34,4 @@ group :test do
   # Stop upgrading SimpleCov until the following issue will be resolved.
   # https://github.com/codeclimate/test-reporter/issues/418
   gem 'simplecov', '~> 0.10', '< 0.18', require: false
-  gem 'sqlite3'
 end
