@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'shared/authorization/authorizer'
 require 'shared/adapters/users_adapter'
@@ -11,9 +13,9 @@ describe Authorizer do
       let(:user_crud) { double('user_crud', read: []) }
 
       it 'raise not-authorized' do
-        expect {
+        expect do
           subject.authenticate(email: 'bruce.wayne@gotham.com', password: 'dontcare')
-        }.to raise_error(EndUserError, /Email or password do not match/)
+        end.to raise_error(EndUserError, /Email or password do not match/)
       end
     end
 
@@ -32,16 +34,16 @@ describe Authorizer do
   end
 
   describe 'get_permissions' do
-    let(:user) { { email: 'bruce.wayne@gotham.com', password: pwd_hash, roles: [:hr, :candidate] } }
+    let(:user) { { email: 'bruce.wayne@gotham.com', password: pwd_hash, roles: %i[hr candidate] } }
     let(:user_crud) do
       double('user_crud', read: [user])
     end
 
     context 'when user is not yet authorized' do
       it 'raise not-authorized' do
-        expect {
+        expect do
           subject.get_permissions
-        }.to raise_error(Authorizer::NotAuthorizedError)
+        end.to raise_error(Authorizer::NotAuthorizedError)
       end
     end
 
@@ -51,14 +53,14 @@ describe Authorizer do
       end
 
       it 'returns a list with all the permissions for all the user roles' do
-        stub_const("Authorizer::PERMISSIONS", {
-          hr: [:feature1, :feature2],
-          candidate: [:feature3]
-        })
+        stub_const('Authorizer::PERMISSIONS', {
+                     hr: %i[feature1 feature2],
+                     candidate: [:feature3]
+                   })
 
         result = subject.get_permissions
 
-        expect(result).to eq([:feature1, :feature2, :feature3])
+        expect(result).to eq(%i[feature1 feature2 feature3])
       end
     end
   end
@@ -75,9 +77,9 @@ describe Authorizer do
 
     context 'when user is not yet authorized' do
       it 'raise not-authorized' do
-        expect {
+        expect do
           subject.grant_access
-        }.to raise_error(Authorizer::NotAuthorizedError)
+        end.to raise_error(Authorizer::NotAuthorizedError)
       end
     end
 
@@ -87,7 +89,8 @@ describe Authorizer do
       end
 
       it 'updates the roles for the authorized user' do
-        expect(user_crud).to receive(:update).with(hash_including(roles: existing_roles + new_roles))
+        expect(user_crud).to receive(:update)
+          .with(hash_including(roles: existing_roles + new_roles))
         subject.grant_access(roles: new_roles)
 
         internal_user = subject.send(:user)
@@ -101,7 +104,7 @@ describe Authorizer do
     let!(:user_crud) do
       #  Given an existing user with role guest
       user_crud = double('user_crud', read: [user])
-      allow(user_crud).to receive(:update).and_return(roles: [ 'cadidate', 'guest' ])
+      allow(user_crud).to receive(:update).and_return(roles: %w[cadidate guest])
       user_crud
     end
 
@@ -110,13 +113,13 @@ describe Authorizer do
 
       expect(result).to match(
         hash_including(
-          roles: [ 'cadidate', 'guest' ]
+          roles: %w[cadidate guest]
         )
       )
     end
 
     context 'when assigning same role twice' do
-      xit 'does not duplicate the role' do end
+      xit 'does not duplicate the role'
     end
   end
 end
