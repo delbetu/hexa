@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'shared/authorization/domain/token'
 require 'shared/authorization/domain/password'
 require 'shared/errors'
@@ -9,10 +11,10 @@ class Authorizer
 
   # TODO: Use string for roles
   USER_ROLE = { 'bruce.wayne@gotham.com' => [:hr] }.freeze
-  ROLES = [:hr, :guest].freeze
-  FEATURES = [:sign_in, :sign_up].freeze
+  ROLES = %i[hr guest].freeze
+  FEATURES = %i[sign_in sign_up].freeze
   PERMISSIONS = {
-    hr: [:sign_in, :sign_up],
+    hr: %i[sign_in sign_up],
     candidate: [:apply]
   }.freeze
 
@@ -25,16 +27,17 @@ class Authorizer
   # Remembers authenticated user
   def authenticate(email:, password:)
     user = authorization_data.read(filters: [email: email]).first
-    assert(!user.nil?, "Email or password do not match.")
+    assert(!user.nil?, 'Email or password do not match.')
 
     password_matches = (Password.decrypt(user[:password]) == password)
-    assert(password_matches, "Email or password do not match.")
+    assert(password_matches, 'Email or password do not match.')
 
     @user = user
   end
 
   def get_permissions
     raise Authorizer::NotAuthorizedError unless user
+
     roles = user[:roles]
 
     roles.map { |role| PERMISSIONS[role.to_sym] }.flatten.compact
@@ -55,15 +58,23 @@ class Authorizer
   end
 
   def grant_roles_to_user(email:, roles:)
-    user = authorization_data.read(filters: [ { email: email } ]).first
-    assert(!user.nil?, "No user found")
+    user = authorization_data.read(filters: [{ email: email }]).first
+    assert(!user.nil?, 'No user found')
 
     @user = user
     grant_access(roles: roles)
   end
 
+  # TODO:
+  # This allow_roles strategy is different from get_permissions
+  # which one should we use?
+  def allow_roles(*required_roles)
+    assert(user[:roles].intersection(required_roles).any?, 'Unauthorized')
+  end
+
   private
 
   attr_reader :authorization_data
+  # TODO: rename to user_context
   attr_accessor :user
 end

@@ -4,6 +4,19 @@ require 'spec_helper'
 require 'shared/authorization/authorizer'
 require 'shared/adapters/users_adapter'
 
+class DummyClass
+  attr_reader :authorizer
+
+  def initialize(authorizer:)
+    @authorizer = authorizer
+  end
+
+  def candidate_or_hr_method
+    authorizer.allow_roles('candidate', 'hr')
+    'success'
+  end
+end
+
 describe Authorizer do
   let(:pwd_hash) { UserBuilder.pwd_hash_for(:pass123!) }
   subject { Authorizer.new(authorization_data: user_crud) }
@@ -120,6 +133,44 @@ describe Authorizer do
 
     context 'when assigning same role twice' do
       xit 'does not duplicate the role'
+    end
+  end
+
+  describe '#allow_roles' do
+    let(:authorizer) { Authorizer.new(authorization_data: double('user_crud', read: [user])) }
+    before do
+      authorizer.authenticate(email: 'bruce.wayne@gotham.com', password: 'pass123!')
+    end
+
+    context 'when candidate is authenticated' do
+      let(:user) do
+        { email: 'bruce.wayne@gotham.com', password: pwd_hash, roles: %w[candidate] }
+      end
+      it 'allows user to call this method' do
+        subject = DummyClass.new(authorizer: authorizer)
+        expect(subject.candidate_or_hr_method).to eq('success')
+      end
+    end
+
+    context 'when hr is authenticated' do
+      let(:user) do
+        { email: 'bruce.wayne@gotham.com', password: pwd_hash, roles: %w[hr] }
+      end
+      it 'allows user to call this method' do
+        subject = DummyClass.new(authorizer: authorizer)
+        expect(subject.candidate_or_hr_method).to eq('success')
+      end
+    end
+
+    context 'when user with ohter role is authenticated' do
+      let(:user) do
+        { email: 'bruce.wayne@gotham.com', password: pwd_hash, roles: %w[other] }
+      end
+
+      it 'raise Un authorized error' do
+        subject = DummyClass.new(authorizer: authorizer)
+        expect { subject.candidate_or_hr_method }.to raise_error(EndUserError)
+      end
     end
   end
 end
