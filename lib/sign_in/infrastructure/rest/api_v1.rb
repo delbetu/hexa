@@ -16,6 +16,7 @@ post '/sign_in' do
 
   # Deliver result
   if result.success?
+    session['token'] = result.token
     { token: result.token }
   else # Handle errors
     { errors: result.errors }

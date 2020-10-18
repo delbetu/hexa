@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sinatra'
 require_relative 'sign_in/infrastructure/rest/api_v1'
 require_relative 'sign_up/infrastructure/rest/api_v1'
@@ -8,6 +10,10 @@ before do
   headers 'Access-Control-Allow-Origin' => '*'
 end
 
+require 'securerandom'
+enable :sessions
+set :session_secret, ENV.fetch('SESSION_SECRET') { SecureRandom.hex(64) }
+
 use Rack::Logger
 helpers do
   def logger
@@ -16,7 +22,7 @@ helpers do
 end
 
 get '/' do
-  "Welcome to Hexa."
+  'Welcome to Hexa.'
 end
 
 ################################# GRAPHQL #################################
@@ -63,7 +69,7 @@ require 'sign_in/infrastructure/graphql/api_v1'
 require_relative 'prototype/job_posts'
 
 class Types::QueryType < GraphQL::Schema::Object
-  description "The query root of this schema"
+  description 'The query root of this schema'
   include UsersQuery
   field :job_posts, resolver: Resolvers::JobPostsQuery, description: 'other users query'
 end
@@ -92,7 +98,7 @@ post '/graphql' do
   result = GraphqlEndpoint.execute(
     data['query'],
     variables: vars,
-    context: { current_user: nil  },
+    context: { session: session, current_user: nil }
   )
   logger.info("Graphql result: #{result.to_h}")
   result.to_json

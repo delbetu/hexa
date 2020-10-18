@@ -1,12 +1,14 @@
-require "shared/authorization/infrastructure/auth_data_provider_adapter"
-require "shared/authorization/authorizer"
-require "sign_in/actions/sign_in"
+# frozen_string_literal: true
+
+require 'shared/authorization/infrastructure/auth_data_provider_adapter'
+require 'shared/authorization/authorizer'
+require 'sign_in/actions/sign_in'
 
 module Mutations
   class SignIn < BaseMutation
     null true
 
-    description "generates an access token for the given user credentials."
+    description 'generates an access token for the given user credentials.'
     # Input
     argument :email, String, required: true
     argument :password, String, required: true
@@ -24,6 +26,7 @@ module Mutations
       result = use_case.sign_in(**credentials)
 
       if result.success?
+        context[:session][:token] = result.token
         {
           success: true,
           errors: [],
