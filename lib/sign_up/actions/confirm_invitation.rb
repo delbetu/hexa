@@ -5,7 +5,7 @@ require 'sign_up/domain/invitation'
 
 class ConfirmInvitation
   # Inject collaborators dependencies
-  def initialize(invitator:, authorizer: Authorizer.new)
+  def initialize(invitator:, authorizer:)
     @invitator = invitator
     @authorizer = authorizer
   end

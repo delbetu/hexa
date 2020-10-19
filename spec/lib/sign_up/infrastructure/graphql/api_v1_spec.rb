@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'api_helper'
 require 'persistence_helper'
@@ -16,12 +18,12 @@ describe 'Sign Up' do
     }
 
     vars = {
-      "name": "Adam Smith",
-      "email": "adam@email.com",
-      "password": "Pass123!",
+      "name": 'Adam Smith',
+      "email": 'adam@email.com',
+      "password": 'Pass123!'
     }
 
-    post '/graphql', { query: gql_action_call, variables: vars}.to_json
+    post '/graphql', { query: gql_action_call, variables: vars }.to_json
 
     expect(last_response).to be_ok
     content = JSON.parse(last_response.body)

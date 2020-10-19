@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'shared/authorization/infrastructure/auth_data_provider_adapter'
+require 'shared/authorization/authorizer'
 require 'shared/adapters/sequel/crud'
 
 module Adapters
@@ -54,6 +56,8 @@ module Mutations
     field :id, ID, null: true
 
     def resolve(posted_on:, active:, company_name:, rich_description:)
+      # only human resources can create posts
+      context[:authorizer].allow_roles('hr')
       created = Adapters::JobPosts.create(
         posted_on: posted_on,
         active: active,

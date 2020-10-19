@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jwt'
 
 class Token
@@ -12,6 +14,8 @@ class Token
 
   # gets token returns data
   def self.decode(token)
-    JWT.decode(token, hmac_secret, true, {algorithm: 'HS256'})
+    return '' unless token
+
+    JWT.decode(token, hmac_secret, true, { algorithm: 'HS256' }).first
   end
 end

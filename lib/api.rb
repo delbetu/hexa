@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'sinatra'
+require 'shared/authorization/authorizer'
 require_relative 'sign_in/infrastructure/rest/api_v1'
 require_relative 'sign_up/infrastructure/rest/api_v1'
 require_relative 'templates_preview_endpoint'
@@ -91,14 +92,25 @@ require 'rack/contrib'
 # use Rack::JSONBodyParser
 # use Rack::PostBodyContentTypeParser
 
+require 'shared/authorization/domain/token'
+require 'shared/authorization/infrastructure/auth_data_provider_adapter'
 post '/graphql' do
   data = JSON.parse(request.body.read)
   vars = data['variables'] || {}
   logger.info("Graphql data: #{data}")
+
+  # User context is stored on authorizer
+  # Which will be inyected into the use cases
+  # Each use case perform allow_roles('cadidate', 'hr')
+  # When authorizer receives authenticate with nil token
+  authorizer = Authorizer.new(authorization_data: AuthDataProviderAdapter)
+  # retrieves and remembers credentials(roles, teams, user_id) for the given user
+  # authorizer.create_user_context(token: session[:token])
+
   result = GraphqlEndpoint.execute(
     data['query'],
     variables: vars,
-    context: { session: session, current_user: nil }
+    context: { session: session, authorizer: authorizer }
   )
   logger.info("Graphql result: #{result.to_h}")
   result.to_json

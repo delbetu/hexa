@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 require 'sign_up/actions/sign_up'
@@ -7,13 +9,15 @@ describe SignUp do
   let(:user_attrs) { build_user.build }
   let(:fake_invitator) { double('invitator', invite: uuid) }
   let(:fake_creator) { double('creator', create: user_attrs.merge(id: 999), exists?: false) }
-  let(:fake_sender) { double('email_sender', send_signup_confirmation: user_attrs.merge(id: 999), exists?: false) }
+  let(:fake_sender) do
+    double('email_sender', send_signup_confirmation: user_attrs.merge(id: 999), exists?: false)
+  end
 
-  subject {
+  subject do
     SignUp
       .new(creator: fake_creator, email_sender: fake_sender, invitator: fake_invitator)
       .call(user_attrs)
-  }
+  end
 
   it 'returns success status' do
     expect(subject.email).to eq(user_attrs[:email])
@@ -53,9 +57,9 @@ describe SignUp do
 
   describe 'when email is already taken' do
     let(:user_attrs) { build_user.build }
-    let(:fake_creator) {
+    let(:fake_creator) do
       double('creator', exists?: true)
-    }
+    end
 
     it 'returns failure status' do
       expect(subject.success?).to eq(false)

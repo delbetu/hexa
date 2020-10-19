@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'api_helper'
 require 'persistence_helper'
@@ -27,20 +29,22 @@ describe 'GET /email_confirmation' do
   # Given an existing user which received an email invitation with a link to confirm it.
   let!(:existing_user) do
     u = build_user.build
-    u = ::SignUp
-      .new(invitator: InvitatorAdapter.new, creator: UserCreatorAdapter, email_sender: EmailSenderAdapter)
-      .call(u)
+    ::SignUp.new(
+      invitator: InvitatorAdapter.new,
+      creator: UserCreatorAdapter,
+      email_sender: EmailSenderAdapter
+    ).call(u)
   end
 
   # when user click confirm link
   subject do
-    get '/email_confirmation', { invitation_id: invitation[:uuid]}
+    get '/email_confirmation', { invitation_id: invitation[:uuid] }
   end
 
   it 'assign promised(the ones stored in the invitation) roles to user' do
     subject
 
-    updated_user = Adapters::Users.read(filters: [ { id: existing_user.id} ]).first
+    updated_user = Adapters::Users.read(filters: [{ id: existing_user.id }]).first
     expect(updated_user[:roles]).to include(*invitation[:roles])
   end
 
@@ -50,7 +54,7 @@ describe 'GET /email_confirmation' do
   end
 
   # TODO: should test this here?
-  context "when user click reject button" do
+  context 'when user click reject button' do
     xit 'redirects to home page'
     xit 'marks invitation as rejected'
     xit 'doesn not add roles to user'

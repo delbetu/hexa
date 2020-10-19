@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'capybara/rspec'
 require 'shared/authorization/authorizer'
@@ -5,7 +7,7 @@ require 'sign_in/actions/sign_in'
 
 feature 'User cannot identify against the system' do
   let(:with_some_permission) do
-    authorizer.grant_access(roles: [:hr])
+    authorizer.grant_access(roles: ['hr'])
   end
 
   let(:when_he_signs_in_using_the_wrong_credentials) do
@@ -18,13 +20,13 @@ feature 'User cannot identify against the system' do
 
   subject { SignIn.new(authenticator: authorizer) }
 
-  let(:authorizer) {
+  let(:authorizer) do
     authorizer = instance_double(Authorizer, grant_access: true)
     allow(authorizer).to receive(:authenticate)
       .with(email: 'peter@email.com', password: 'wrong-pass')
       .and_raise(Authorizer::NotAuthorizedError, 'Invalid email or password.')
     authorizer
-  }
+  end
 
   scenario 'user provides the wrong credentials' do
     with_some_permission
@@ -35,7 +37,7 @@ end
 
 feature 'User cannot identify against the system' do
   let(:with_some_permission) do
-    authorizer.grant_access(roles: [:hr])
+    authorizer.grant_access(roles: ['hr'])
   end
 
   let(:when_he_signs_in_using_malformed_email) do
@@ -48,10 +50,10 @@ feature 'User cannot identify against the system' do
 
   subject { SignIn.new(authenticator: authorizer) }
 
-  let(:authorizer) {
+  let(:authorizer) do
     authorizer = instance_double(Authorizer, grant_access: true)
     authorizer
-  }
+  end
 
   scenario 'user provides the wrong credentials' do
     with_some_permission
@@ -62,7 +64,7 @@ end
 
 feature 'User identifies against the system' do
   let(:given_a_user_with_some_permission) do
-    authorizer.grant_access(roles: [:hr])
+    authorizer.grant_access(roles: ['hr'])
   end
 
   let(:when_he_signs_in_using_the_right_credentials) do
@@ -70,17 +72,17 @@ feature 'User identifies against the system' do
   end
 
   let(:then_the_app_encodes_user_permissions_as_a_token_and_returns_it) do
-    expect(Token.decode(@result.token).first['permissions']).to eq('roles' => ['hr'])
+    expect(Token.decode(@result.token)).to eq('roles' => ['hr'])
   end
 
-  let(:authorizer) {
+  let(:authorizer) do
     instance_double(
       Authorizer,
       authenticate: true,
       grant_access: true,
-      get_token: Token.encode('permissions' => { 'roles' => ['hr'] })
+      token: Token.encode({ 'roles' => ['hr'] })
     )
-  }
+  end
 
   subject { SignIn.new(authenticator: authorizer) }
 

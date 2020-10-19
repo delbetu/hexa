@@ -1,3 +1,4 @@
+- [ ] Cuado la api recibe un token tiene que pedirle al authorizer que guarde el user context (hace como un sign in y guarda las credenciales del usuario en el user_context)
 - [ ] WIP Mandar token por graphql https://www.howtographql.com/graphql-ruby/4-authentication/
 - [ ] Mejorar la estrategia de logs. (hacer que todo se loguee en 'log/<environment.log>')
 - [ ] Agregar folder prototype: que es donde irian los crud agarrado a graphql ( esto tiene que tener un generador de codigo asi es facil tener algo pronto en 2 minutos )
@@ -16,11 +17,13 @@
   apply -> [ candidate ]
 
 - [ ] Grabar una implementacion demo mostrando como se programa con hexa, partiendo de la definicion de un caso de uso.
+- [ ] User is identified by email in many places. Lets replace that with a uuid
 - [ ] Crear un Reporter que encapsule Raven ( Sentry ) y el logger de heroku??, que sea visible de todos lados??
 - [ ] test sign_up user creator adapter
 - [ ] test sign_up email confirmator adapter
 - [ ] deploy a servidor gratis diferente de heroku https://dev.to/vuelancer/free-deployment-providers-bk0
 - [ ] No utilizar coverage en development
+- [x] Representar los roles siempre como strings (en algunos lados estan como symbols)
 - [x] GH hook para hacer autodeploy de master branch
 - [x] Crear generador de crud
 - [x] Error deploy production

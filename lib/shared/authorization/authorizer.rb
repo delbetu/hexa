@@ -5,18 +5,11 @@ require 'shared/authorization/domain/password'
 require 'shared/errors'
 require 'shared/authorization/infrastructure/auth_data_provider_adapter'
 
-# Wraps an authenticated user
+# Holds user context credentials so it can assess if the user has permissions
 class Authorizer
   NotAuthorizedError = Class.new(EndUserError)
 
-  # TODO: Use string for roles
-  USER_ROLE = { 'bruce.wayne@gotham.com' => [:hr] }.freeze
-  ROLES = %i[hr guest].freeze
-  FEATURES = %i[sign_in sign_up].freeze
-  PERMISSIONS = {
-    hr: %i[sign_in sign_up],
-    candidate: [:apply]
-  }.freeze
+  ROLES = %w[hr guest candidate].freeze
 
   # authorization_data: Crud data source with email, password
   def initialize(authorization_data: AuthDataProviderAdapter)
@@ -24,7 +17,7 @@ class Authorizer
   end
 
   # Verify that the credentials are legitimate
-  # Remembers authenticated user
+  # Remembers authenticated user credentials
   def authenticate(email:, password:)
     user = authorization_data.read(filters: [email: email]).first
     assert(!user.nil?, 'Email or password do not match.')
@@ -32,49 +25,49 @@ class Authorizer
     password_matches = (Password.decrypt(user[:password]) == password)
     assert(password_matches, 'Email or password do not match.')
 
-    @user = user
+    @user_context = { id: user[:id], roles: user[:roles] }
   end
 
-  def get_permissions
-    raise Authorizer::NotAuthorizedError unless user
-
-    roles = user[:roles]
-
-    roles.map { |role| PERMISSIONS[role.to_sym] }.flatten.compact
+  # retrieves and remembers credentials(roles, teams, user_id) for the given user
+  def create_user_context(token:)
+    decoded = Token.decode(token)
+    @user_context = { roles: decoded[:roles] }
   end
 
-  def get_token
-    Token.encode({ 'permissions' => get_permissions })
+  # TODO: rename to user_roles
+  def roles
+    raise Authorizer::NotAuthorizedError unless @user_context
+
+    @user_context[:roles]
+  end
+
+  # TODO: rename to generate token
+  def token
+    Token.encode({ 'roles' => roles })
   end
 
   def grant_access(roles: [])
-    raise Authorizer::NotAuthorizedError unless user
+    raise Authorizer::NotAuthorizedError unless @user_context&.[](:id)
 
-    current_roles = user[:roles]
+    current_roles = @user_context[:roles]
     new_roles = current_roles + roles
 
-    resulting_roles = authorization_data.update(user.merge(roles: new_roles))
-    self.user = user.merge(resulting_roles)
+    @user_context = authorization_data.update(@user_context.merge(roles: new_roles))
   end
 
   def grant_roles_to_user(email:, roles:)
     user = authorization_data.read(filters: [{ email: email }]).first
     assert(!user.nil?, 'No user found')
 
-    @user = user
+    @user_context = { id: user[:id], roles: user[:roles] + roles }
     grant_access(roles: roles)
   end
 
-  # TODO:
-  # This allow_roles strategy is different from get_permissions
-  # which one should we use?
   def allow_roles(*required_roles)
-    assert(user[:roles].intersection(required_roles).any?, 'Unauthorized')
+    assert(@user_context[:roles].intersection(required_roles).any?, 'Unauthorized')
   end
 
   private
 
   attr_reader :authorization_data
-  # TODO: rename to user_context
-  attr_accessor :user
 end

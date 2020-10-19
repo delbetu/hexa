@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sign_up/actions/sign_up'
 require 'sign_up/infrastructure/user_creator_adapter'
 require 'sign_up/infrastructure/email_sender_adapter'
@@ -5,7 +7,7 @@ require 'sign_up/infrastructure/invitator_adapter'
 
 module Mutations
   class SignUp < BaseMutation
-    description "Creates a user"
+    description 'Creates a user'
     # Input
     argument :name, String, required: true
     argument :email, String, required: true
@@ -17,9 +19,12 @@ module Mutations
 
     def resolve(name:, email:, password:)
       user_attributes = { name: name, email: email, password: password }
-      result = ::SignUp
-        .new(invitator: InvitatorAdapter.new, creator: UserCreatorAdapter, email_sender: EmailSenderAdapter)
-        .call(user_attributes)
+      result = ::SignUp.new(
+        invitator: InvitatorAdapter.new,
+        creator: UserCreatorAdapter,
+        email_sender: EmailSenderAdapter
+      ).call(user_attributes)
+
       if result.success?
         {
           success: true,

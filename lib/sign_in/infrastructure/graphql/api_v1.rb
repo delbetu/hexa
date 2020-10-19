@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'shared/authorization/infrastructure/auth_data_provider_adapter'
+require 'shared/authorization/domain/token'
 require 'shared/authorization/authorizer'
 require 'sign_in/actions/sign_in'
 
@@ -21,8 +22,7 @@ module Mutations
     def resolve(email:, password:)
       credentials = { email: email, password: password }
 
-      authorizer = Authorizer.new(authorization_data: AuthDataProviderAdapter)
-      use_case = ::SignIn.new(authenticator: authorizer)
+      use_case = ::SignIn.new(authenticator: context[:authorizer])
       result = use_case.sign_in(**credentials)
 
       if result.success?

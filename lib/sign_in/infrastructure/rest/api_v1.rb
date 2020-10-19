@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'sinatra'
-require "shared/authorization/infrastructure/auth_data_provider_adapter"
-require "shared/authorization/authorizer"
-require "sign_in/actions/sign_in"
+require 'shared/authorization/infrastructure/auth_data_provider_adapter'
+require 'shared/authorization/authorizer'
+require 'sign_in/actions/sign_in'
 
 post '/sign_in' do
   # Gather Input ( params, db or external resource)
