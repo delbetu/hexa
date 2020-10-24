@@ -102,16 +102,19 @@ post '/graphql' do
   # User context is stored on authorizer
   # Which will be inyected into the use cases
   # Each use case perform allow_roles('cadidate', 'hr')
-  # When authorizer receives authenticate with nil token
   authorizer = Authorizer.new(authorization_data: AuthDataProviderAdapter)
-  # retrieves and remembers credentials(roles, teams, user_id) for the given user
-  # authorizer.create_user_context(token: session[:token])
+  authorizer.authenticate_from_token(session[:token])
 
   result = GraphqlEndpoint.execute(
     data['query'],
     variables: vars,
-    context: { session: session, authorizer: authorizer }
+    context: { authorizer: authorizer }
   )
+
+  if result.to_h.dig('data', 'signIn', 'token')
+    session[:token] = result.to_h.dig('data', 'signIn', 'token')
+  end
+
   logger.info("Graphql result: #{result.to_h}")
   result.to_json
 end

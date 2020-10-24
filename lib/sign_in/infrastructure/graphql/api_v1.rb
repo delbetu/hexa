@@ -26,7 +26,6 @@ module Mutations
       result = use_case.sign_in(**credentials)
 
       if result.success?
-        context[:session][:token] = result.token
         {
           success: true,
           errors: [],

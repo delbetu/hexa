@@ -28,12 +28,6 @@ class Authorizer
     @user_context = { id: user[:id], roles: user[:roles] }
   end
 
-  # retrieves and remembers credentials(roles, teams, user_id) for the given user
-  def create_user_context(token:)
-    decoded = Token.decode(token)
-    @user_context = { roles: decoded[:roles] }
-  end
-
   # TODO: rename to user_roles
   def roles
     raise Authorizer::NotAuthorizedError unless @user_context
@@ -63,7 +57,16 @@ class Authorizer
     grant_access(roles: roles)
   end
 
+  def authenticate_from_token(token)
+    return if token.nil? || token.empty?
+
+    decoded = Token.decode(token)
+    @user_context = { id: decoded['id'], roles: decoded['roles'] }
+  end
+
   def allow_roles(*required_roles)
+    raise Authorizer::NotAuthorizedError unless @user_context&.[](:roles)
+
     assert(@user_context[:roles].intersection(required_roles).any?, 'Unauthorized')
   end
 

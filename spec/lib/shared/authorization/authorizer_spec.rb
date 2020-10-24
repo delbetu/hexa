@@ -19,6 +19,11 @@ end
 
 describe Authorizer do
   let(:pwd_hash) { UserBuilder.pwd_hash_for(:pass123!) }
+  let(:user) do
+    { id: 1, email: 'bruce.wayne@gotham.com', password: pwd_hash, roles: ['hr'] }
+  end
+  let(:user_crud) { double('user_crud', read: [user]) }
+
   subject { Authorizer.new(authorization_data: user_crud) }
 
   describe '#authenticate' do
@@ -101,6 +106,13 @@ describe Authorizer do
 
     context 'when assigning same role twice' do
       xit 'does not duplicate the role'
+    end
+  end
+
+  describe '#authenticate_from_token' do
+    it 'decodes token and remembers credentials(roles, teams, user_id)' do
+      subject.authenticate_from_token(Token.encode({ id: 1, roles: ['hr'] }))
+      expect(subject.instance_variable_get(:@user_context)).to eq({ id: 1, roles: ['hr'] })
     end
   end
 
