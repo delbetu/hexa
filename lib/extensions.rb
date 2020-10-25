@@ -59,16 +59,17 @@ def with_error_handling(error_id = 'Error')
 rescue EndUserError => e
   ActionError(id: error_id, errors: [e.message])
 rescue StandardError => e
-  if env == 'production'
-    Raven.capture_exception(e)
+  raise unless env == 'production'
 
-    # End user doesn't receive a stacktrace
-    ActionError(id: error_id, errors: [
-                  'An error has occured. '\
-                  "It's been reported and we will be working on it soon. "\
-                  'Please try again later.'
-                ])
-  else # test & Development
-    raise e # Developer needs to track the issue.
-  end
+  Raven.capture_exception(e)
+
+  # End user doesn't receive a stacktrace
+  ActionError(
+    id: error_id,
+    errors: [
+      'An error has occured. '\
+      "It's been reported and we will be working on it soon. "\
+      'Please try again later.'
+    ]
+  )
 end

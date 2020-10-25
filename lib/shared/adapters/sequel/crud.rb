@@ -78,28 +78,45 @@ module Adapters
       end
 
       # returns only the affected attributes
-      def update(attributes)
+      def update(attributes, scope: nil)
         id = attributes.delete(:id)
         raise UpdateError, 'id is required for update' unless id
 
         attributes = serialize_json_columns(attributes, @json_columns)
 
-        affected_rows = DB[@table].where(id: id).update(attributes)
-        raise UpdateError, "#{entity_name} with id: #{id} not found" if affected_rows.zero?
+        base_query = DB[@table]
+        if scope
+          base_query = base_query.where(scope)
+          raise UpdateError, "Scope rule not met #{scope}" unless base_query.any?
+        end
+
+        old_attributes = base_query.where(id: id).first
+        raise UpdateError, "#{entity_name} with id: #{id} not found" unless old_attributes
+
+        affected_rows = base_query.where(id: id).update(attributes)
+
+        return old_attributes if affected_rows.zero?
 
         attributes[:id] = id
         attributes
-      rescue ::Sequel::DatabaseError => e
-        raise UpdateError, "Error updating #{entity_name} with #{attributes}"
+      rescue ::Sequel::DatabaseError
+        raise UpdateError, "Error updating #{entity_name} with #{old_attributes}"
       end
 
-      def delete(id:)
-        row_to_delete = DB[@table].where(id: id).first
-        affected_rows = DB[@table].where(id: id).delete
-        raise DeleteError, "#{entity_name} with id: #{id} not found" if affected_rows.zero?
+      def delete(id:, scope: nil)
+        base_query = DB[@table]
+        row_to_delete = base_query.where(id: id).first
+        raise DeleteError, "#{entity_name} with id: #{id} not found" unless row_to_delete
+
+        if scope
+          base_query = base_query.where(scope)
+          raise DeleteError, "Scope rule not met #{scope}" unless base_query.any?
+        end
+
+        base_query.where(id: id).delete
 
         row_to_delete
-      rescue ::Sequel::DatabaseError => e
+      rescue ::Sequel::DatabaseError
         raise DeleteError, "Error deleting #{entity_name} with #{attributes}"
       end
 
