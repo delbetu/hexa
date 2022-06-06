@@ -32,7 +32,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     fast_jsonapi (1.5)
       activesupport (>= 4.2)
-    graphql (1.12.4)
+    graphql (2.0.9)
     haml (5.2.0)
       temple (>= 0.8.0)
       tilt
